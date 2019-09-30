@@ -1,6 +1,6 @@
 package com.yunwa.taobaoke.controller.admin;
 
-import com.yunwa.taobaoke.service.AdminService;
+import com.yunwa.taobaoke.service.PidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/sys")
 public class PidController {
     @Autowired
-    private AdminService adminService;
+    private PidService adminService;
 
     /**
      * 获取推广位 id
