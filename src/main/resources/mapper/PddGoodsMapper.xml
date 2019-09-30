@@ -1,76 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yunwa.taobaoke.dao.PddGoodsMapper">
-  <!--<resultMap id="BaseResultMap" type="com.yunwa.taobaoke.pojo.PddGoods">
-    <id column="goods_id" jdbcType="BIGINT" property="goodsId" />
-    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
-    <result column="min_group_price" jdbcType="VARCHAR" property="minGroupPrice" />
+  <!--<resultMap id="BaseResultMap" type="com.yunwa.taobaoke.pojo.po.PddGoods">
+    <id column="goods_id" jdbcType="BIGINT" property="goods_id" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goods_name" />
+    <result column="min_group_price" jdbcType="VARCHAR" property="min_group_price" />
     <result column="goods_desc" jdbcType="VARCHAR" property="goodsDesc" />
-    <result column="goods_thumbnail_url" jdbcType="VARCHAR" property="goodsThumbnailUrl" />
-    <result column="goods_image_url" jdbcType="VARCHAR" property="goodsImageUrl" />
-    <result column="goods_gallery_urls" jdbcType="VARCHAR" property="goodsGalleryUrls" />
-    <result column="mall_name" jdbcType="VARCHAR" property="mallName" />
-    <result column="has_coupon" jdbcType="BIT" property="hasCoupon" />
-    <result column="coupon_discount" jdbcType="VARCHAR" property="couponDiscount" />
-    <result column="promotion_rate" jdbcType="VARCHAR" property="promotionRate" />
-    <result column="sales_tip" jdbcType="VARCHAR" property="salesTip" />
-    <result column="desc_txt" jdbcType="VARCHAR" property="descTxt" />
-    <result column="serv_txt" jdbcType="VARCHAR" property="servTxt" />
-    <result column="lgst_txt" jdbcType="VARCHAR" property="lgstTxt" />
+    <result column="goods_thumbnail_url" jdbcType="VARCHAR" property="goods_thumbnail_url" />
+    <result column="goods_image_url" jdbcType="VARCHAR" property="goods_image_url" />
+    <result column="goods_gallery_urls" jdbcType="VARCHAR" property="goods_gallery_urls" />
+    <result column="mall_name" jdbcType="VARCHAR" property="mall_name" />
+    <result column="has_coupon" jdbcType="BIT" property="has_coupon" />
+    <result column="coupon_discount" jdbcType="VARCHAR" property="coupon_discount" />
+    <result column="promotion_rate" jdbcType="VARCHAR" property="promotion_rate" />
+    <result column="sales_tip" jdbcType="VARCHAR" property="sales_tip" />
+    <result column="desc_txt" jdbcType="VARCHAR" property="desc_txt" />
+    <result column="serv_txt" jdbcType="VARCHAR" property="serv_txt" />
+    <result column="lgst_txt" jdbcType="VARCHAR" property="lgst_txt" />
   </resultMap>-->
+
+    <resultMap id="BaseResultMap" type="com.yunwa.taobaoke.pojo.vo.PddGoodsDocumentVo">
+        <id column="goods_id" jdbcType="BIGINT" property="goods_id" />
+        <result column="goods_name" jdbcType="VARCHAR" property="goods_name" />
+        <result column="min_group_price" jdbcType="VARCHAR" property="min_group_price" />
+        <result column="goods_desc" jdbcType="VARCHAR" property="goods_desc" />
+        <result column="coupon_discount" jdbcType="VARCHAR" property="coupon_discount" />
+        <result column="real_price" jdbcType="VARCHAR" property="real_price" />
+        <association property="promotion_url" javaType="com.yunwa.taobaoke.pojo.po.PromotionUrl">
+            <result column="short_url" property="short_url"/>
+        </association>
+    </resultMap>
 
   <sql id="Base_Column_List">
     goods_id, goods_name, min_group_price, goods_desc, goods_thumbnail_url, goods_image_url, 
     goods_gallery_urls, mall_name, category_name, has_coupon, coupon_discount, promotion_rate, sales_tip,
-    desc_txt, serv_txt, lgst_txt
+    desc_txt, serv_txt, lgst_txt, opt_id, opt_name, real_price
   </sql>
 
   <!--分页查询-->
-  <select id="selectByPage" parameterType="map" resultType="com.yunwa.taobaoke.pojo.PddGoods">
+  <select id="selectByPage" parameterType="map" resultType="com.yunwa.taobaoke.pojo.po.PddGoods">
     select 
     <include refid="Base_Column_List" />
     from pdd_goods
     <where>
-        <if test="category_name != null">
-            category_name = #{category_name},
+        <if test="opt_name != null and opt_name != ''">
+            opt_name LIKE CONCAT ('%', #{opt_name}, '%')
         </if>
-        <if test="keyword != null">
-            goods_name LIKE CONCAT ('%', #{keyword}, '%')
+        <if test="keyword != null and goods_name != ''">
+            and goods_name LIKE CONCAT ('%', #{keyword}, '%')
         </if>
     </where>
     <if test="sort_type != null">
         order by
         <choose>
             <when test="sort_type =='sales_tip'">
-                #{sales_tip} DESC 
+                ${sort_type} DESC
             </when>
             <when test="sort_type =='min_group_price_up'">
-                #{min_group_price}
+                real_price
             </when>
             <when test="sort_type =='min_group_price_down'">
-                #{min_group_price} desc
+                real_price desc
             </when>
             <otherwise>
-                #{promotion_rate} desc
+                promotion_rate desc
             </otherwise>
         </choose>
     </if>
   </select>
 
   <!--插入商品数据-->
-  <insert id="insertPddGoodsData" parameterType="com.yunwa.taobaoke.pojo.PddGoods">
+  <insert id="insertPddGoodsData" parameterType="com.yunwa.taobaoke.pojo.po.PddGoods">
     insert into pdd_goods (goods_id, goods_name, min_group_price, 
       goods_desc, goods_thumbnail_url, goods_image_url, 
       goods_gallery_urls, mall_name, category_name, has_coupon,
-      coupon_discount, promotion_rate, sales_tip, 
-      desc_txt, serv_txt, lgst_txt
-      )
-    values (#{goods_id,jdbcType=BIGINT}, #{goods_name,jdbcType=VARCHAR}, #{min_group_price,jdbcType=VARCHAR},
-      #{goods_desc,jdbcType=VARCHAR}, #{goods_thumbnail_url,jdbcType=VARCHAR}, #{goods_image_url,jdbcType=VARCHAR},
-      #{goods_gallery_urls,jdbcType=VARCHAR}, #{mall_name,jdbcType=VARCHAR}, #{category_name,jdbcType=VARCHAR}, #{has_coupon,jdbcType=BIT},
-      #{coupon_discount,jdbcType=VARCHAR}, #{promotion_rate,jdbcType=VARCHAR}, #{sales_tip,jdbcType=VARCHAR},
-      #{desc_txt,jdbcType=VARCHAR}, #{serv_txt,jdbcType=VARCHAR}, #{lgst_txt,jdbcType=VARCHAR}
-      )
+      coupon_discount, promotion_rate, sales_tip,
+      desc_txt, serv_txt, lgst_txt, p_id, opt_id, opt_name, real_price)
+    values (#{goods_id}, #{goods_name}, #{min_group_price},
+      #{goods_desc}, #{goods_thumbnail_url}, #{goods_image_url},
+      #{goods_gallery_urls}, #{mall_name}, #{category_name}, #{has_coupon},
+      #{coupon_discount}, #{promotion_rate}, #{sales_tip},
+      #{desc_txt}, #{serv_txt}, #{lgst_txt}, #{p_id},
+      #{opt_id}, #{opt_name}, #{real_price})
   </insert>
 
     <!--删除全部商品-->
@@ -79,14 +90,23 @@
     </delete>
 
     <!--查询商品详情-->
-    <select id="showGoodsDetil" parameterType="long" resultType="com.yunwa.taobaoke.pojo.PddGoods">
+    <select id="showGoodsDetil" parameterType="long" resultType="com.yunwa.taobaoke.pojo.po.PddGoods">
         select
         <include refid="Base_Column_List" />
         from pdd_goods
         where goods_id = #{goods_id}
     </select>
 
-  <!--<insert id="insertSelective" parameterType="com.yunwa.taobaoke.pojo.PddGoods">
+    <!--查询商品文案-->
+    <select id="getGoodsDocument" parameterType="long" resultMap="BaseResultMap">
+        select pd.goods_id, pd.goods_name, pd.min_group_price, pd.coupon_discount,
+               pd.goods_desc, pd.real_price, pr.short_url
+        from pdd_goods as pd, promotion_url as pr
+        where pd.goods_id = pr.goods_id
+        and pd.goods_id = #{goods_id}
+    </select>
+
+  <!--<insert id="insertSelective" parameterType="com.yunwa.taobaoke.pojo.po.PddGoods">
     insert into pdd_goods
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="goodsId != null">
@@ -184,7 +204,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.yunwa.taobaoke.pojo.PddGoods">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunwa.taobaoke.pojo.po.PddGoods">
     update pdd_goods
     <set>
       <if test="goodsName != null">
@@ -233,7 +253,7 @@
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.yunwa.taobaoke.pojo.PddGoods">
+  <update id="updateByPrimaryKey" parameterType="com.yunwa.taobaoke.pojo.po.PddGoods">
     update pdd_goods
     set goods_name = #{goodsName,jdbcType=VARCHAR},
       min_group_price = #{minGroupPrice,jdbcType=VARCHAR},

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
@@ -9,28 +10,47 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/reset.css">
     <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/clipboard.min.js"></script>
     <script type="text/javascript" src="js/pddDetails.js"></script>
+   <!-- <script>
+        $(document).ready(function(){
+            var clipboard = new Clipboard('#copy-text');   //这个类名是点击触发的类名
+            clipboard.on('success', function(e) {
+                console.log(e);
+
+            });
+            clipboard.on('error', function(e) {
+                console.log(e);
+            });
+        });
+    </script>-->
 </head>
+
 <body>
-<!--搜索-->
+    <!--搜索-->
     <div id="body-content">
         <!-- 搜索栏-->
         <div class="serch">
             <div class="serch-box">
                 <div class="serch-reletive">
-                <input class="content"placeholder="搜索你想要的宝贝">
-                    <span class="iconfont icon-icon-test ico"></span>
+                    <input class="content" placeholder="搜索你想要的宝贝">
+                    <span class="iconfont icon-icon-test ico" id="search"></span>
                 </div>
             </div>
         </div>
         <!--动图-->
         <div class="banner">
             <div class="banner-content">
-                <div class="banner-img">
-                    <div class="slide-1">
+                <div class="banner-img" id="banner-img">
+                    <!--<a href="###" class="active">
                         <img src="images/banner01.jpg" class="banimg1">
-
-                    </div>
+                    </a>
+                    <a href="###">
+                        <img src="images/car.png" class="banimg1">
+                    </a>
+                    <a href="###">
+                        <img src="images/icon-kj.png" class="banimg1">
+                    </a>-->
                 </div>
                 <div class="slide-buttle">
                     <span class="bullter"></span>
@@ -55,7 +75,7 @@
         </div>
         <!--口令-->
         <div class="command">
-            <div class="command-content">
+            <div class="command-content" >
                 <h3 style="padding-left: 20px; font-weight: 700; font-size: 15px">一键复制</h3>
             </div>
         </div>
@@ -65,7 +85,8 @@
                 <div class="store"></div>
                 <label style="font-size: 12px">店铺评分</label>
             </div>
-            <span style="padding-left: 12px">描述：很高</span><span style="padding-left: 12px">服务：很高</span><span style="padding-left: 12px">发货：</span>
+            <span style="padding-left: 12px">描述：很高</span><span style="padding-left: 12px">服务：很高</span><span
+                style="padding-left: 12px">发货：</span>
         </div>
 
         <!--商品简介-->
@@ -76,46 +97,70 @@
             </div>
         </div>
     </div>
-<!--返回圆-->
-<!--<div class="return">
+    <!--返回圆-->
+    <!--<div class="return">
     <a href="###" class="return-box">
         <span class="iconfont icon-fanhui" style="color: #fff;font-size: 36px"></span>
     </a>
 </div>-->
 
-<!--尾部-->
-<div class="footer">
-    <div class="footer-content">
-        <a href="/" title="网站首页" style="color:#adadad ">网站首页</a>
-        <em style="color: #adadad;padding: 0 12px">|</em>
-        <em style="color: #adadad;padding: 0 12px">|</em>
-        <a href="###" title="联系客服" style="color: #adadad;line-height: 28px;" >联系客服</a>
+    <!--尾部-->
+    <div class="footer">
+        <div class="footer-content">
+            <a href="/" title="网站首页" style="color:#adadad ">网站首页</a>
+            <em style="color: #adadad;padding: 0 12px">|</em>
+            <em style="color: #adadad;padding: 0 12px">|</em>
+            <a href="###" title="联系客服" style="color: #adadad;line-height: 28px;">联系客服</a>
 
-        <a href="###" class="copyright">copyright © all rights reserved</a>
+            <a href="###" class="copyright">copyright © all rights reserved</a>
+        </div>
     </div>
-</div>
-<!--尾部固定栏-->
-<div class="footer-fixed">
-    <div class="navbar">
-        <a href="###"class="navbar-content">
-            <p class="sub-img-content">
-                <img src="images/foot01.png" alt="" class="sub-img">
-            </p>
-            <p class="foot-sub">返回</p>
-        </a>
+    <!--尾部固定栏-->
+    <div class="footer-fixed">
+        <div class="navbar">
+            <a href="index.html" class="navbar-content">
+                <p class="sub-img-content">
+                    <img src="images/foot01.png" alt="" class="sub-img">
+                </p>
+                <p class="foot-sub">返回</p>
+            </a>
+        </div>
+
+        <div class="navbar navbar-btn" id="copy-document">
+            <a href="###" class="foot-btn foot-btn-left">
+                <p class="foot-sub">复制文案</p>
+            </a>
+        </div>
+        <div class="navbar navbar-btn">
+            <a href="javascript:;" class="foot-btn foot-btn-right">
+                <p class="foot-sub" id="getTicket">立即领券</p>
+            </a>
+        </div>
     </div>
 
-    <div class="navbar navbar-btn">
-        <a href="###" class="foot-btn foot-btn-left">
-            <p class="foot-sub" >复制文案</p>
-        </a>
+    <!-- 遮罩层 -->
+    <div class="detaile-hidden">
+        <div class="detaile-hiddle-text" onClick="event.cancelBubble = true">
+            <div class="detaile-alert">
+                <h2><span>商品分享文案</span></h2>
+                <div class="alert-text">
+                    <textarea name="" id="goods-document">【商品】CPT面部护理蛋白肽套装润肤补水美肤紧致精华原液
+【在售价】268元
+【优惠券】170元
+【券后价】98元
+推荐理由：【爆款线雕】这次是2瓶线！黄金蛋白线精华液，改善细纹、补水保湿、滋养、淡化细纹，金箔多肽自有抗揍功效，抗松弛，抗多种皱纹【赠运费险，全国包邮】
+- - - - -
+【商品领券下单】长按复制这条信息打开【手淘】可领券并下单￥Bln2YMgh6kO￥
+                    </textarea>
+                    <div class="bar">
+                        <button class="btn-text" id="copy-text" data-clipboard-action="copy" data-clipboard-target="#goods-document">一键复制文案</button>
+                        <!--<a class="btn-text" id="copy-text" data-text="一键复制文案<">一键复制文案</a>-->
+                    </div>
+                </div>
+                <p class='tip'>复制文案，打开手机淘宝即可领取优惠券</p>
+            </div>
+        </div>
     </div>
-    <div class="navbar navbar-btn">
-        <a href="###" class="foot-btn foot-btn-right">
-            <p class="foot-sub">立即领券</p>
-        </a>
-    </div>
-
-</div>
 </body>
+
 </html>

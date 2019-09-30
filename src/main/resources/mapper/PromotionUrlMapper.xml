@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunwa.taobaoke.dao.PromotionUrlMapper">
+ <!-- <resultMap id="BaseResultMap" type="com.yunwa.taobaoke.pojo.po.PromotionUrl">
+    <id column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="mobile_url" jdbcType="VARCHAR" property="mobileUrl" />
+    <result column="short_url" jdbcType="VARCHAR" property="shortUrl" />
+  </resultMap>-->
+  <sql id="Base_Column_List">
+    goods_id, mobile_url, short_url
+  </sql>
+
+    <!--查询链接对象-->
+  <select id="getPromotionUrl" parameterType="java.lang.Long" resultType="com.yunwa.taobaoke.pojo.po.PromotionUrl">
+    select 
+    <include refid="Base_Column_List" />
+    from promotion_url
+    where goods_id = #{goods_id,jdbcType=BIGINT}
+  </select>
+
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from promotion_url
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </delete>-->
+
+  <!--插入链接对象-->
+  <insert id="insertUrl" parameterType="com.yunwa.taobaoke.pojo.po.PromotionUrl">
+    insert into promotion_url (goods_id, mobile_url, short_url)
+    values (#{goods_id,jdbcType=BIGINT}, #{mobile_url,jdbcType=VARCHAR}, #{short_url,jdbcType=VARCHAR})
+  </insert>
+
+
+  <!--<insert id="insertSelective" parameterType="com.yunwa.taobaoke.pojo.po.PromotionUrl">
+    insert into promotion_url
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="mobileUrl != null">
+        mobile_url,
+      </if>
+      <if test="shortUrl != null">
+        short_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="mobileUrl != null">
+        #{mobileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shortUrl != null">
+        #{shortUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunwa.taobaoke.pojo.po.PromotionUrl">
+    update promotion_url
+    <set>
+      <if test="mobileUrl != null">
+        mobile_url = #{mobileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shortUrl != null">
+        short_url = #{shortUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunwa.taobaoke.pojo.po.PromotionUrl">
+    update promotion_url
+    set mobile_url = #{mobileUrl,jdbcType=VARCHAR},
+      short_url = #{shortUrl,jdbcType=VARCHAR}
+    where goods_id = #{goodsId,jdbcType=BIGINT}
+  </update>-->
+</mapper>

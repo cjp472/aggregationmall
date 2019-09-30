@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
+
+    <title>复制按钮</title>
+</head>
+<body>
+微信号：<span id="target">xyz2018</span>
+<button class="btn" data-clipboard-action="copy" data-clipboard-target="#target" id="copy_btn">
+    点击复制
+</button>
+</body>
+<script>
+    $(document).ready(function(){
+        var clipboard = new Clipboard('#copy_btn');
+        clipboard.on('success', function(e) {
+            alert("微信号复制成功",1500);
+            e.clearSelection();
+            console.log(e.clearSelection);
+        });
+    });
+</script>
+</html>

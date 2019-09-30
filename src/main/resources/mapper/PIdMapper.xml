@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yunwa.taobaoke.dao.PIdMapper">
-  <!--<resultMap id="BaseResultMap" type="com.yunwa.taobaoke.pojo.PId">
+  <!--<resultMap id="BaseResultMap" type="com.yunwa.taobaoke.pojo.po.PId">
     <id column="p_id" jdbcType="VARCHAR" property="pId" />
     <result column="create_time" jdbcType="VARCHAR" property="createTime" />
     <result column="pid_name" jdbcType="VARCHAR" property="pidName" />
@@ -19,11 +19,11 @@
     delete from p_id_table
     where p_id = #{pId,jdbcType=VARCHAR}
   </delete>-->
-  <insert id="insertPid" parameterType="com.yunwa.taobaoke.pojo.PId">
+  <insert id="insertPid" parameterType="com.yunwa.taobaoke.pojo.po.PId">
     insert into p_id_table (p_id, create_time, pid_name)
     values (#{p_id,jdbcType=VARCHAR}, #{create_time,jdbcType=VARCHAR}, #{pid_name,jdbcType=VARCHAR})
   </insert>
- <!-- <insert id="insertSelective" parameterType="com.yunwa.taobaoke.pojo.PId">
+ <!-- <insert id="insertSelective" parameterType="com.yunwa.taobaoke.pojo.po.PId">
     insert into p_id_table
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="pId != null">
@@ -48,7 +48,7 @@
       </if>
     </trim>
   </insert>-->
-  <!--<update id="updateByPrimaryKeySelective" parameterType="com.yunwa.taobaoke.pojo.PId">
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.yunwa.taobaoke.pojo.po.PId">
     update p_id_table
     <set>
       <if test="createTime != null">
@@ -60,7 +60,7 @@
     </set>
     where p_id = #{pId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yunwa.taobaoke.pojo.PId">
+  <update id="updateByPrimaryKey" parameterType="com.yunwa.taobaoke.pojo.po.PId">
     update p_id_table
     set create_time = #{createTime,jdbcType=VARCHAR},
       pid_name = #{pidName,jdbcType=VARCHAR}
