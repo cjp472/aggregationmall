@@ -2,6 +2,6 @@ package com.yunwa.taobaoke.service;
 
 import java.util.List;
 
-public interface AdminService {
+public interface PidService {
     void getPid(long number, List<String> p_id_name_list);
 }
