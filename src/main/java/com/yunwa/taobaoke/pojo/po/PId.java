@@ -1,6 +1,8 @@
-package com.yunwa.taobaoke.pojo;
+package com.yunwa.taobaoke.pojo.po;
 
-//推广位对象
+/**
+ * 推广位对象
+ */
 public class PId {
     private String create_time;
     private String pid_name;

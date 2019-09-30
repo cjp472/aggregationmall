@@ -1,16 +1,14 @@
-package com.yunwa.taobaoke.pojo;
+package com.yunwa.taobaoke.pojo.po;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * 商品对象
  */
 public class PddGoods implements Serializable {
-    private long goods_id;          //商品id
+    private Long goods_id;          //商品id
     private String goods_name;      //商品名称
-    private String min_group_price;   //最小拼团价（单位为分）,作为显示的单价
+    private Long min_group_price;   //最小拼团价（单位为分）,作为显示的单价
     private String goods_desc;      //商品描述
     private String goods_thumbnail_url;     //商品缩略图
     private String goods_image_url;         //商品主图
@@ -18,12 +16,48 @@ public class PddGoods implements Serializable {
     private String mall_name;       //店铺名字
     private String category_name;   //商品类目名
     private boolean has_coupon;     //商品是否有优惠券
-    private String coupon_discount;   //优惠券面额，单位为分
-    private String promotion_rate;    //佣金比例，千分比
-    private String sales_tip;       //已售卖件数
+    private Long coupon_discount;   //优惠券面额，单位为分
+    private Long promotion_rate;    //佣金比例，千分比
+    private Integer sales_tip;       //已售卖件数
     private String desc_txt;        //描述分
     private String serv_txt;        //服务分
     private String lgst_txt;        //物流分
+    private String p_id;            //推广位id
+    private long opt_id;            //商品标签ID
+    private String opt_name;        //商品标签名
+    private Long real_price;        //券后的真实价格
+
+    public Long getReal_price() {
+        return real_price;
+    }
+
+    public void setReal_price(Long real_price) {
+        this.real_price = real_price;
+    }
+
+    public String getOpt_name() {
+        return opt_name;
+    }
+
+    public void setOpt_name(String opt_name) {
+        this.opt_name = opt_name;
+    }
+
+    public long getOpt_id() {
+        return opt_id;
+    }
+
+    public void setOpt_id(long opt_id) {
+        this.opt_id = opt_id;
+    }
+
+    public String getP_id() {
+        return p_id;
+    }
+
+    public void setP_id(String p_id) {
+        this.p_id = p_id;
+    }
 
     public long getGoods_id() {
         return goods_id;
@@ -39,14 +73,6 @@ public class PddGoods implements Serializable {
 
     public void setGoods_name(String goods_name) {
         this.goods_name = goods_name;
-    }
-
-    public String getMin_group_price() {
-        return min_group_price;
-    }
-
-    public void setMin_group_price(String min_group_price) {
-        this.min_group_price = min_group_price;
     }
 
     public String getGoods_desc() {
@@ -97,27 +123,11 @@ public class PddGoods implements Serializable {
         this.has_coupon = has_coupon;
     }
 
-    public String getCoupon_discount() {
-        return coupon_discount;
-    }
-
-    public void setCoupon_discount(String coupon_discount) {
-        this.coupon_discount = coupon_discount;
-    }
-
-    public String getPromotion_rate() {
-        return promotion_rate;
-    }
-
-    public void setPromotion_rate(String promotion_rate) {
-        this.promotion_rate = promotion_rate;
-    }
-
-    public String getSales_tip() {
+    public Integer getSales_tip() {
         return sales_tip;
     }
 
-    public void setSales_tip(String sales_tip) {
+    public void setSales_tip(Integer sales_tip) {
         this.sales_tip = sales_tip;
     }
 
@@ -154,24 +164,32 @@ public class PddGoods implements Serializable {
         this.lgst_txt = lgst_txt;
     }
 
-    @Override
-    public String toString() {
-        return "PddGoods{" +
-                "goods_id='" + goods_id + '\'' +
-                ", goods_name='" + goods_name + '\'' +
-                ", min_group_price='" + min_group_price + '\'' +
-                ", goods_desc='" + goods_desc + '\'' +
-                ", goods_thumbnail_url='" + goods_thumbnail_url + '\'' +
-                ", goods_image_url='" + goods_image_url + '\'' +
-                ", goods_gallery_urls='" + goods_gallery_urls + '\'' +
-                ", mall_name='" + mall_name + '\'' +
-                ", has_coupon=" + has_coupon +
-                ", coupon_discount='" + coupon_discount + '\'' +
-                ", promotion_rate='" + promotion_rate + '\'' +
-                ", sales_tip='" + sales_tip + '\'' +
-                ", desc_txt='" + desc_txt + '\'' +
-                ", serv_txt='" + serv_txt + '\'' +
-                ", lgst_txt='" + lgst_txt + '\'' +
-                '}';
+    public void setGoods_id(Long goods_id) {
+        this.goods_id = goods_id;
     }
+
+    public Long getMin_group_price() {
+        return min_group_price;
+    }
+
+    public void setMin_group_price(Long min_group_price) {
+        this.min_group_price = min_group_price;
+    }
+
+    public Long getCoupon_discount() {
+        return coupon_discount;
+    }
+
+    public void setCoupon_discount(Long coupon_discount) {
+        this.coupon_discount = coupon_discount;
+    }
+
+    public Long getPromotion_rate() {
+        return promotion_rate;
+    }
+
+    public void setPromotion_rate(Long promotion_rate) {
+        this.promotion_rate = promotion_rate;
+    }
+
 }

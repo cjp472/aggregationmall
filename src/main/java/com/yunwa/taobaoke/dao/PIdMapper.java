@@ -1,6 +1,6 @@
 package com.yunwa.taobaoke.dao;
 
-import com.yunwa.taobaoke.pojo.PId;
+import com.yunwa.taobaoke.pojo.po.PId;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,7 +1,5 @@
 package com.yunwa.taobaoke.service;
 
-import com.yunwa.taobaoke.pojo.PId;
-
 import java.util.List;
 
 public interface AdminService {

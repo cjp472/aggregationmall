@@ -9,17 +9,12 @@ import com.pdd.pop.sdk.http.PopHttpClient;
 import com.pdd.pop.sdk.http.api.request.PddDdkGoodsPidGenerateRequest;
 import com.pdd.pop.sdk.http.api.response.PddDdkGoodsPidGenerateResponse;
 import com.yunwa.taobaoke.constant.PddConstantValues;
-import com.yunwa.taobaoke.dao.AdminMapper;
 import com.yunwa.taobaoke.dao.PIdMapper;
-import com.yunwa.taobaoke.pojo.PId;
-import com.yunwa.taobaoke.pojo.PddGoods;
+import com.yunwa.taobaoke.pojo.po.PId;
 import com.yunwa.taobaoke.service.AdminService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

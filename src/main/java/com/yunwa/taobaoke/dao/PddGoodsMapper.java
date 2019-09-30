@@ -1,6 +1,7 @@
 package com.yunwa.taobaoke.dao;
 
-import com.yunwa.taobaoke.pojo.PddGoods;
+import com.yunwa.taobaoke.pojo.po.PddGoods;
+import com.yunwa.taobaoke.pojo.vo.PddGoodsDocumentVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -20,6 +21,9 @@ public interface PddGoodsMapper {
     //商品详情
     PddGoods showGoodsDetil(long goods_id);
 
+    //获取商品文案
+    PddGoodsDocumentVo getGoodsDocument(long goods_id);
+
     int deleteByPrimaryKey(Long goodsId);
 
     int insert(PddGoods record);
@@ -31,6 +35,5 @@ public interface PddGoodsMapper {
     int updateByPrimaryKeySelective(PddGoods record);
 
     int updateByPrimaryKey(PddGoods record);
-
 
 }
