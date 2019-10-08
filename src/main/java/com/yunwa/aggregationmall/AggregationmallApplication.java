@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @MapperScan(basePackages = {"com.yunwa.aggregationmall.dao"})
 @SpringBootApplication
-public class TaobaokeApplication {
+public class AggregationmallApplication {
     public static void main(String[] args) {
-        SpringApplication.run(TaobaokeApplication.class, args);
+        SpringApplication.run(AggregationmallApplication.class, args);
     }
 
 }

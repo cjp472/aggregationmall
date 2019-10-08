@@ -26,8 +26,8 @@ public class UserGoodsController {
     /**
      * 首页查询商品
      * @param pageNum   当前页
-     * @param opt_name    商品标签ID
-     * @param sort_type     排序方式
+     * @param opt_name  商品标签ID
+     * @param sort_type 排序方式
      * @param keyword   关键字
      * @return  商品信息集合
      */

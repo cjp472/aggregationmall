@@ -15,3 +15,8 @@ mybatis:
 
 server:
   port: 8088
+
+pdd:
+  client:
+    id: 3ebe31a78aee470189690aa9e1cf9317
+    secret: 75cffb0c91451a6b177d2de5ba2036e51685f668

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunwa.aggregationmall.dao.pdd.NotCpsOrderMapper">
+ <!-- <resultMap id="BaseResultMap" type="com.yunwa.taobaoke.pojo.NotCpsOrder">
+    <id column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from not_cps_order
+    where order_sn = #{orderSn,jdbcType=VARCHAR}
+  </delete>-->
+
+    <!--插入订单号-->
+  <insert id="insertOrderSn" parameterType="com.yunwa.aggregationmall.pojo.pdd.po.NotCpsOrder">
+    insert into not_cps_order (order_sn)
+    values (#{order_sn,jdbcType=VARCHAR})
+  </insert>
+
+  <!--<insert id="insertSelective" parameterType="com.yunwa.taobaoke.pojo.NotCpsOrder">
+    insert into not_cps_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderSn != null">
+        order_sn,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderSn != null">
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>-->
+</mapper>

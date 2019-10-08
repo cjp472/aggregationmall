@@ -1,11 +1,11 @@
-//初始化参数
-var pageNo;
-var opt_name;
-var keyword;
-var sort_type;
-
 $(function () {
-    //去sessionstorage取页面的信息
+    //初始化参数
+    var pageNo;
+    var opt_name;
+    var keyword;
+    var sort_type;
+
+    /*//去sessionstorage取页面的信息
     var pageInfo = sessionStorage.getItem('page');
     console.log(pageInfo);
     //不为空就跳转到原来的页面
@@ -21,13 +21,11 @@ $(function () {
         //首次进入加载商品列表
         pageNo = 1;
         showGoodsList(pageNo);
-    }
+    }*/
 
-    /*//初始化参数
-    var pageNo = 1;
-    var opt_name;
-    var keyword;
-    var sort_type;*/
+    //首次进入加载商品列表
+    pageNo = 1;
+    showGoodsList(pageNo);
 
     //搜索按钮
     $("#search").click(function () {
@@ -121,7 +119,7 @@ function showGoodsList(pageNum, opt_name, keyword, sort_type) {
                 "\t\t\t\t\t\t\t</div>\n" +
                 "\t\t\t\t\t\t\t<div class=\"aui-list-theme-message\">\n" +
                 "\t\t\t\t\t\t\t\t<h1 class=\"aui-list-theme-title\">" + goods.goods_desc + "</h1>\n" +
-                "\t\t\t\t\t\t\t\t<h1 class=\"aui-list-theme-subtitle\">预售商品 限时抽取三名幸运奖</h1>\n" +
+                "\t\t\t\t\t\t\t\t<h1 class=\"aui-list-theme-subtitle\"></h1>\n" +
                 "\n" +
                 "\t\t\t\t\t\t\t\t<h4>" +
                 "                   <em class=\"aui-infos\">" + goods.sales_tip + "人已购</em>" +

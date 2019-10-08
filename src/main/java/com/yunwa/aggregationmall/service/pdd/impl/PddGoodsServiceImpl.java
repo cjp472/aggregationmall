@@ -24,6 +24,7 @@ import com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVo;
 import com.yunwa.aggregationmall.service.pdd.PddGoodsService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,12 +40,18 @@ public class PddGoodsServiceImpl implements PddGoodsService {
     @Autowired
     private PromotionUrlMapper promotionUrlMapper;
 
+    /*@Value("${pdd.client.id}")
+    private String clientId;
+
+    @Value("{pdd.client.secret}")
+    private String clientSecret;*/
+
     //发送请求的客户端对象
     PopClient client = new PopHttpClient(PddConstantValues.clientId, PddConstantValues.clientSecret);
+    //PopClient client = new PopHttpClient(clientId, clientSecret);
 
     /**
      * @pdd.ddk.goods.search
-     *
      * @param opt_id 商品标签类目id
      * @param page_size 默认100，每页商品数量
      * @param p_id  商品推广id

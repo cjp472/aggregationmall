@@ -27,7 +27,7 @@ $(function () {
             "        \n" +
             "        <div class=\"banner\">\n" +
             "            <div class=\"banner-content\">\n" +
-            "                <div class=\"banner-img\" jd='banner-img'>\n" +
+            "                <div class=\"banner-img\" id='banner-img'>\n" +
 
             "                </div>\n" +
             "                <div class=\"slide-buttle\">\n" +
@@ -105,7 +105,7 @@ $(function () {
     //复制文案按钮
     $("#copy-document").click(function () {
         $.ajax({
-            url     :   "getGoodsDocument",
+            url     :   "user/getGoodsDocument",
             data    :   {"goods_id":goods_id},
             success :   success
         });
@@ -132,10 +132,10 @@ $(function () {
 
     });
 
-    //立即领券按钮
+    //立即领券按钮f
     $("#getTicket").click(function () {
         $.ajax({
-            url: "getPromotionUrl",
+            url: "user/getPromotionUrl",
             data: { "goods_id": goods_id },
             success: success
         });

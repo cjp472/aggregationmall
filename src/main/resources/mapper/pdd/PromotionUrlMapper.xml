@@ -11,7 +11,7 @@
   </sql>
 
     <!--查询链接对象-->
-  <select id="getPromotionUrl" parameterType="java.lang.Long" resultType="com.yunwa.aggregationmall.pojo.po.PromotionUrl">
+  <select id="getPromotionUrl" parameterType="java.lang.Long" resultType="com.yunwa.aggregationmall.pojo.pdd.po.PromotionUrl">
     select 
     <include refid="Base_Column_List" />
     from promotion_url
@@ -24,8 +24,8 @@
   </delete>-->
 
   <!--插入链接对象-->
-  <insert id="insertUrl" parameterType="com.yunwa.aggregationmall.pojo.po.PromotionUrl">
-    insert into promotion_url (goods_id, mobile_url, short_url)
+  <insert id="insertUrl" parameterType="com.yunwa.aggregationmall.pojo.pdd.po.PromotionUrl">
+    insert ignore into promotion_url (goods_id, mobile_url, short_url)
     values (#{goods_id,jdbcType=BIGINT}, #{mobile_url,jdbcType=VARCHAR}, #{short_url,jdbcType=VARCHAR})
   </insert>
 

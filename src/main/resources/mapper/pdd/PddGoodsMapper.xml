@@ -19,14 +19,14 @@
     <result column="lgst_txt" jdbcType="VARCHAR" property="lgst_txt" />
   </resultMap>-->
 
-    <resultMap id="BaseResultMap" type="com.yunwa.aggregationmall.pojo.vo.PddGoodsDocumentVo">
+    <resultMap id="BaseResultMap" type="com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVo">
         <id column="goods_id" jdbcType="BIGINT" property="goods_id" />
         <result column="goods_name" jdbcType="VARCHAR" property="goods_name" />
         <result column="min_group_price" jdbcType="VARCHAR" property="min_group_price" />
         <result column="goods_desc" jdbcType="VARCHAR" property="goods_desc" />
         <result column="coupon_discount" jdbcType="VARCHAR" property="coupon_discount" />
         <result column="real_price" jdbcType="VARCHAR" property="real_price" />
-        <association property="promotion_url" javaType="com.yunwa.aggregationmall.pojo.po.PromotionUrl">
+        <association property="promotion_url" javaType="com.yunwa.aggregationmall.pojo.pdd.po.PromotionUrl">
             <result column="short_url" property="short_url"/>
         </association>
     </resultMap>
@@ -38,7 +38,7 @@
   </sql>
 
   <!--分页查询-->
-  <select id="selectByPage" parameterType="map" resultType="com.yunwa.aggregationmall.pojo.po.PddGoods">
+  <select id="selectByPage" parameterType="map" resultType="com.yunwa.aggregationmall.pojo.pdd.po.PddGoods">
     select 
     <include refid="Base_Column_List" />
     from pdd_goods
@@ -70,8 +70,8 @@
   </select>
 
   <!--插入商品数据-->
-  <insert id="insertPddGoodsData" parameterType="com.yunwa.aggregationmall.pojo.po.PddGoods">
-    insert into pdd_goods (goods_id, goods_name, min_group_price, 
+  <insert id="insertPddGoodsData" parameterType="com.yunwa.aggregationmall.pojo.pdd.po.PddGoods">
+    insert ignore into pdd_goods (goods_id, goods_name, min_group_price,
       goods_desc, goods_thumbnail_url, goods_image_url, 
       goods_gallery_urls, mall_name, category_name, has_coupon,
       coupon_discount, promotion_rate, sales_tip,
@@ -90,7 +90,7 @@
     </delete>
 
     <!--查询商品详情-->
-    <select id="showGoodsDetil" parameterType="long" resultType="com.yunwa.aggregationmall.pojo.po.PddGoods">
+    <select id="showGoodsDetil" parameterType="long" resultType="com.yunwa.aggregationmall.pojo.pdd.po.PddGoods">
         select
         <include refid="Base_Column_List" />
         from pdd_goods

@@ -19,7 +19,7 @@
     delete from p_id_table
     where p_id = #{pId,jdbcType=VARCHAR}
   </delete>-->
-  <insert id="insertPid" parameterType="com.yunwa.aggregationmall.pojo.po.PId">
+  <insert id="insertPid" parameterType="com.yunwa.aggregationmall.pojo.pdd.po.PId">
     insert into p_id_table (p_id, create_time, pid_name)
     values (#{p_id,jdbcType=VARCHAR}, #{create_time,jdbcType=VARCHAR}, #{pid_name,jdbcType=VARCHAR})
   </insert>
