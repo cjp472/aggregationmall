@@ -1,15 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <script>
-        var userJsonStr = sessionStorage.getItem('user');
-        userEntity = JSON.parse(userJsonStr);
-        console.log(userEntity.name);
-    </script>
+    <title></title>
 </head>
 <body>
-    b页面
+    <p>在新页面中返回到前一页浏览的历史位置1</p>
+    <p>在新页面中返回到前一页浏览的历史位置2</p>
+    <p>在新页面中返回到前一页浏览的历史位置3</p>
+    <p>在新页面中返回到前一页浏览的历史位置4</p>
+    <p>在新页面中返回到前一页浏览的历史位置5</p>
+    <p>在新页面中返回到前一页浏览的历史位置6</p>
+    <p>在新页面中返回到前一页浏览的历史位置7</p>
+    <p>在新页面中返回到前一页浏览的历史位置8</p>
+    <p>在新页面中返回到前一页浏览的历史位置9</p>
+    <p>在新页面中返回到前一页浏览的历史位置10</p>
+    <p>在新页面中返回到前一页浏览的历史位置11</p>
+    <p>在新页面中返回到前一页浏览的历史位置12</p>
+    <p>在新页面中返回到前一页浏览的历史位置13</p>
+    <p>在新页面中返回到前一页浏览的历史位置14</p>
+    <p>在新页面中返回到前一页浏览的历史位置15</p>
+    <p>在新页面中返回到前一页浏览的历史位置16</p>
+    <p>在新页面中返回到前一页浏览的历史位置17</p>
+    <p>在新页面中返回到前一页浏览的历史位置18</p>
+    <p>在新页面中返回到前一页浏览的历史位置19</p>
+    <p>在新页面中返回到前一页浏览的历史位置20</p>
+    <p>在新页面中返回到前一页浏览的历史位置21</p>
+    <p>在新页面中返回到前一页浏览的历史位置22</p>
+    <p>在新页面中返回到前一页浏览的历史位置23</p>
+    <p>在新页面中返回到前一页浏览的历史位置24</p>
+    <p>在新页面中返回到前一页浏览的历史位置25</p>
+    <p>在新页面中返回到前一页浏览的历史位置26</p>
+    <p>在新页面中返回到前一页浏览的历史位置27</p>
+    <p>在新页面中返回到前一页浏览的历史位置28</p>
+    <p>在新页面中返回到前一页浏览的历史位置29</p>
+    <p>在新页面中返回到前一页浏览的历史位置30</p>
+    <a href="a.html">跳转</a>
 </body>
+<script src="js/pdd/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    $(function(){
+        var str = window.location.href;
+        str = str.substring(str.lastIndexOf('/')+1),
+            getCookie = localStorage.getItem(str);
+        if(getCookie){
+            $('html,body').scrollTop(getCookie);
+        }
+    });
+    $(window).scroll(function(){
+        var str = window.location.href;
+        str = str.substring(str.lastIndexOf('/')+1);
+        var top = $(window).scrollTop();
+        localStorage.setItem(str,top);
+    })
+</script>
 </html>
