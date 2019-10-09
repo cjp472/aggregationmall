@@ -25,8 +25,8 @@
 
     <sql id="Base_Column_List">
     order_sn, goods_id, goods_name, goods_quantity, goods_price, order_amount, promotion_rate,
-    promotion_amount, order_status, order_status_desc, order_create_time, order_pay_time,
-    order_receive_time, auth_duo_id, zs_duo_id, p_id, user_id, promotion_status, real_promotion_amount
+    promotion_amount, order_status, order_status_desc, auth_duo_id, zs_duo_id, p_id, user_id,
+    promotion_status, real_promotion_amount
   </sql>
 
     <!--查询订单信息-->
@@ -56,5 +56,54 @@
       #{p_id,jdbcType=VARCHAR}, #{user_id,jdbcType=BIGINT}, #{promotion_status,jdbcType=INTEGER},
       #{real_promotion_amount,jdbcType=BIGINT})
     </insert>
+
+    <!--获取该用户所有的订单号-->
+    <select id="getAllOrderSn" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT order_sn FROM pdd_order WHERE user_id = #{user_id};
+    </select>
+
+    <!--更新用户订单状态-->
+    <insert id="updateOrder" parameterType="com.yunwa.aggregationmall.pojo.pdd.po.PddOrder">
+        INSERT INTO `pdd_order`(`order_sn`, `goods_id`, `goods_name`, `goods_quantity`, `goods_price`,
+                  `order_amount`,`promotion_rate`, `promotion_amount`, `order_status`, `order_status_desc`,
+		          `auth_duo_id`, `zs_duo_id`, `p_id`, `user_id`, `promotion_status`, `real_promotion_amount`)
+        VALUES (#{order_sn,jdbcType=VARCHAR}, #{goods_id,jdbcType=BIGINT}, #{goods_name,jdbcType=VARCHAR},
+          #{goods_quantity,jdbcType=BIGINT}, #{goods_price,jdbcType=BIGINT}, #{order_amount,jdbcType=BIGINT},
+          #{promotion_rate,jdbcType=BIGINT}, #{promotion_amount,jdbcType=BIGINT}, #{order_status,jdbcType=INTEGER},
+          #{order_status_desc,jdbcType=VARCHAR}, #{auth_duo_id,jdbcType=BIGINT}, #{zs_duo_id,jdbcType=BIGINT},
+          #{p_id,jdbcType=VARCHAR}, #{user_id,jdbcType=BIGINT}, #{promotion_status,jdbcType=INTEGER},
+          #{real_promotion_amount,jdbcType=BIGINT})
+        ON DUPLICATE KEY UPDATE `order_sn` = VALUES(`order_sn`), `goods_id` = VALUES(`goods_id`),
+		`goods_name` = VALUES(`goods_name`), `goods_quantity` = VALUES(`goods_quantity`), `goods_price` = VALUES(`goods_price`),
+		 `order_amount` = VALUES(`order_amount`), `promotion_rate` = VALUES(`promotion_rate`),
+		 `promotion_amount` = VALUES(`promotion_amount`),
+		 `order_status` = VALUES(`order_status`), `order_status_desc` = VALUES(`order_status_desc`),
+		 `auth_duo_id` = VALUES(`auth_duo_id`), `zs_duo_id` = VALUES(`zs_duo_id`), `p_id` = VALUES(`p_id`),
+		 `user_id` = VALUES(`user_id`), `promotion_status` = VALUES(`promotion_status`),
+		 `real_promotion_amount` = VALUES(`real_promotion_amount`)
+    </insert>
+
+    <!--已完成的订单的佣金总额-->
+    <select id="getTotalPromotionAmount" parameterType="java.lang.Long" resultType="java.lang.Long">
+        SELECT SUM(`real_promotion_amount`)
+        FROM`pdd_order`
+        WHERE user_id = #{user_id,jdbcType=BIGINT}
+        AND `order_status` = 2
+    </select>
+
+    <!--将已完成的订单移入finished_order-->
+    <insert id="moveToFinishedOrder" parameterType="java.lang.Long">
+        insert into `finished_order`
+          select * from `pdd_order`
+          WHERE user_id = #{user_id,jdbcType=BIGINT}
+          AND `order_status` = 2;
+    </insert>
+
+    <!--删除原表中的数据-->
+    <delete id="deleteFinishedOrder" parameterType="java.lang.Long">
+      DELETE FROM `pdd_order`
+      WHERE `user_id` = 'order_sn'
+      AND `order_status` = 2;
+    </delete>
 
 </mapper>

@@ -13,7 +13,7 @@ public class PddOrder {
 
     private Long order_amount;   //订单价格（分）
 
-    private Long promotion_rate; //订单价格（分）
+    private Long promotion_rate; //佣金比例 千分比
 
     private Long promotion_amount;   //佣金（分）
 

@@ -29,4 +29,11 @@ public class PddConstantValues {
 
     //推广位id
     public final static String p_id = "9192384_112642534";
+
+    //缩短链接网的key
+    public final static String key = "5d9d99208e676d2de3714ebe@f4a2b029654809114acc033a77e2118c";
+
+    //
+    public final static String ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+
 }

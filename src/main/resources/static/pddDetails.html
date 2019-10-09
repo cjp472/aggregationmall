@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>详情页</title>
     <link rel="shortcut icon" href="images/pdd/titleLog.png">
     <link rel="stylesheet" href="css/pdd/detaiils.css">
@@ -152,8 +153,7 @@
 【商品领券下单】长按复制这条信息打开【手淘】可领券并下单￥Bln2YMgh6kO￥
                     </textarea>
                     <div class="bar">
-                        <button class="btn-text" id="copy-text" data-clipboard-action="copy" data-clipboard-target="#goods-document">一键复制文案</button>
-                        <!--<a class="btn-text" jd="copy-text" data-text="一键复制文案<">一键复制文案</a>-->
+                        <button onClick="copyUrl2()" id="copy-text">一键复制文案</button>
                     </div>
                 </div>
                 <p class='tip'>复制文案，打开手机淘宝即可领取优惠券</p>
@@ -161,5 +161,18 @@
         </div>
     </div>
 </body>
-
+<!--一键复制功能-->
+<script>
+    function copyUrl2() {
+        var Url2 = document.getElementById("goods-document").innerHTML;
+        var oInput = document.createElement('input');
+        oInput.value = Url2;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display = 'none';
+        alert('复制成功');
+    }
+</script>
 </html>

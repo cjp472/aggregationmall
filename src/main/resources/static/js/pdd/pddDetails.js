@@ -126,13 +126,13 @@ $(function () {
 
             //替代原有内容
             //$("#goods-document").replaceWith($goodsDocument);
-            $("#goods-document").html();
+            $("#goods-document").html('');
             $("#goods-document").html($goodsDocument);
         }
 
     });
 
-    //立即领券按钮f
+    //立即领券按钮
     $("#getTicket").click(function () {
         $.ajax({
             url: "user/getPromotionUrl",
@@ -189,21 +189,6 @@ $(function () {
         $(this).addClass('copy-text').html('已复制');
         //var clipboard = new Clipboard('#copy-text');   //这个类名是点击触发的类名
     });
-
-    //一键复制功能
-    var clipboard = new Clipboard('#copy-text');
-    clipboard.on('success', function(e) {
-        alert("微信号复制成功",1500);
-        e.clearSelection();
-        console.log(e.clearSelection);
-    });
-
-    /*var clipboard = new Clipboard('#copy-text',{
-        text: function(trigger) {
-            alert("复制成功！");
-            return trigger.getAttribute('data-text');
-        }
-    });*/
 
 
 });

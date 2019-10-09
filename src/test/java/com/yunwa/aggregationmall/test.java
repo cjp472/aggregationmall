@@ -1,5 +1,6 @@
 package com.yunwa.aggregationmall;
 
+import com.yunwa.aggregationmall.provider.pdd.WeChatAPI;
 import com.yunwa.aggregationmall.service.pdd.impl.PidServiceImpl;
 import org.junit.Test;
 
@@ -17,11 +18,11 @@ public class test {
 //        GoodsInterfaceTest test = new GoodsInterfaceTest();
 //        test.goodsSearch();
 
-        PidServiceImpl adminService = new PidServiceImpl();
+        /*PidServiceImpl adminService = new PidServiceImpl();
         List<String> strings = new ArrayList<>();
         strings.add(0, "a");
         strings.add(1, "b");
-        adminService.getPid(2, strings);
-
+        adminService.getPid(2, strings);*/
+        WeChatAPI.getAccessToken("wx956068d954f63185", "434f4cc794e4cb9b5fd7ee32894a8653" );
     }
 }

@@ -5,27 +5,14 @@ $(function () {
     var keyword;
     var sort_type;
 
-    /*//去sessionstorage取页面的信息
-    var pageInfo = sessionStorage.getItem('page');
-    console.log(pageInfo);
-    //不为空就跳转到原来的页面
-    if (pageInfo != null){
-        //清空原有商品
-        $("#index-theme-box").empty();
-        console.log(pageInfo);
-        var pageEntity = JSON.parse(pageInfo);
-        showGoodsList(pageEntity.pageNo-1, pageEntity.opt_name, pageEntity.keyword, pageEntity.sort_type);
-    }else {
-        //清空原有商品
-        $("#index-theme-box").empty();
-        //首次进入加载商品列表
-        pageNo = 1;
-        showGoodsList(pageNo);
-    }*/
+    //解析链接，获取用户输入的关键字
+    var args = decodeURI(window.location.href).split("=");
+    keyword = args[1];
+
 
     //首次进入加载商品列表
     pageNo = 1;
-    showGoodsList(pageNo);
+    showGoodsList(pageNo, null, keyword);
 
     //搜索按钮
     $("#search").click(function () {
