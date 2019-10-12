@@ -3,16 +3,15 @@ package com.yunwa.aggregationmall.controller.pdd;
 import com.github.pagehelper.PageInfo;
 import com.yunwa.aggregationmall.pojo.pdd.po.PddGoods;
 import com.yunwa.aggregationmall.pojo.pdd.po.PromotionUrl;
-import com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVo;
+import com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVO;
+import com.yunwa.aggregationmall.pojo.pdd.vo.PddPromotionAmountVO;
 import com.yunwa.aggregationmall.provider.pdd.SuoImAPI;
 import com.yunwa.aggregationmall.service.pdd.OrderService;
 import com.yunwa.aggregationmall.service.pdd.PddGoodsService;
 import com.yunwa.aggregationmall.service.pdd.PromotionUrlService;
+import com.yunwa.aggregationmall.utils.UrlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class UserGoodsController {
     private OrderService orderService;
 
     @Autowired
-    private SuoImAPI suoImAPI;
+    private UrlUtils urlUtils;
     /**
      * 首页查询商品
      * @param pageNum   当前页
@@ -85,7 +84,7 @@ public class UserGoodsController {
      * @return 文案对象
      */
     @RequestMapping("/getGoodsDocument")
-    public PddGoodsDocumentVo getGoodsDocument(long goods_id){
+    public PddGoodsDocumentVO getGoodsDocument(long goods_id){
         return pddGoodsService.getGoodsDocument(goods_id);
     }
 
@@ -95,10 +94,10 @@ public class UserGoodsController {
      * @param user_id   用户id
      * @return
      */
-    @RequestMapping(value = "/orderBind")
-    public Map<String, Object> orderBind(@RequestParam("order_sn") String order_sn,
-                                         @RequestParam("user_id") Long user_id){
-        return (Map<String, Object>) orderService.orderBind(order_sn, user_id);
+    @PostMapping(value = "/orderBind")
+    public String orderBind(@RequestParam("order_sn") String order_sn,
+                            @RequestParam("user_id") String user_id){
+        return orderService.orderBind(order_sn, user_id);
     }
 
     /**
@@ -106,8 +105,8 @@ public class UserGoodsController {
      * @param user_id   用户id
      * @return  返佣金额
      */
-    @RequestMapping("/getMoney")
-    public Object getMoney(@RequestParam("user_id") Long user_id){
+    @PostMapping("/getMoney")
+    public String getMoney(@RequestParam("user_id") String user_id){
         //获取返佣金额
         return orderService.getMoney(user_id);
     }
@@ -117,9 +116,9 @@ public class UserGoodsController {
      * @param keyword  关键词（买XX）
      * @return
      */
-    @GetMapping("buySomething")
+    @PostMapping("buySomething")
     public Object buySomething(@RequestParam("keyword") String keyword){
         //返回一个短连接
-        return suoImAPI.getShortUrl(keyword);
+        return urlUtils.getShortURL(keyword);
     }
 }

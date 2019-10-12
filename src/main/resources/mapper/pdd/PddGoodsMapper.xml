@@ -19,7 +19,7 @@
     <result column="lgst_txt" jdbcType="VARCHAR" property="lgst_txt" />
   </resultMap>-->
 
-    <resultMap id="BaseResultMap" type="com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVo">
+    <resultMap id="BaseResultMap" type="com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVO">
         <id column="goods_id" jdbcType="BIGINT" property="goods_id" />
         <result column="goods_name" jdbcType="VARCHAR" property="goods_name" />
         <result column="min_group_price" jdbcType="VARCHAR" property="min_group_price" />
@@ -104,6 +104,10 @@
         from pdd_goods as pd, promotion_url as pr
         where pd.goods_id = pr.goods_id
         and pd.goods_id = #{goods_id}
+    </select>
+
+    <select id="getAllGoodsId" resultType="long">
+        SELECT goods_id FROM pdd_goods
     </select>
 
   <!--<insert jd="insertSelective" parameterType="com.yunwa.aggregationion.pojo.po.PddGoods">

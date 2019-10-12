@@ -12,18 +12,6 @@
     <script type="text/javascript" src="js/pdd/jquery.min.js"></script>
     <script type="text/javascript" src="js/pdd/clipboard.min.js"></script>
     <script type="text/javascript" src="js/pdd/pddDetails.js"></script>
-   <!-- <script>
-        $(document).ready(function(){
-            var clipboard = new Clipboard('#copy-text');   //这个类名是点击触发的类名
-            clipboard.on('success', function(e) {
-                console.log(e);
-
-            });
-            clipboard.on('error', function(e) {
-                console.log(e);
-            });
-        });
-    </script>-->
 </head>
 
 <body>
@@ -52,9 +40,9 @@
                         <img src="images/pdd/icon-kj.png" class="banimg1">
                     </a>-->
                 </div>
-                <div class="slide-buttle">
+                <!--<div class="slide-buttle">
                     <span class="bullter"></span>
-                </div>
+                </div>-->
             </div>
         </div>
         <!--价格-->
@@ -172,7 +160,7 @@
         document.execCommand("Copy"); // 执行浏览器复制命令
         oInput.className = 'oInput';
         oInput.style.display = 'none';
-        alert('复制成功');
+        //alert('复制成功');
     }
 </script>
 </html>

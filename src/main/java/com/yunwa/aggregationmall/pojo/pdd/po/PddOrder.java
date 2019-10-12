@@ -27,7 +27,7 @@ public class PddOrder {
 
     private String p_id;             //推广位id
 
-    private Long user_id;            //用户id
+    private String user_id;            //用户id
 
     private Integer promotion_status;    //返佣状态 0 已返，1 未返
 
@@ -137,11 +137,11 @@ public class PddOrder {
         this.p_id = p_id;
     }
 
-    public Long getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(Long user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 

@@ -1,7 +1,7 @@
 package com.yunwa.aggregationmall.dao.pdd;
 
 import com.yunwa.aggregationmall.pojo.pdd.po.PddGoods;
-import com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVo;
+import com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVO;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -22,7 +22,7 @@ public interface PddGoodsMapper {
     PddGoods showGoodsDetil(long goods_id);
 
     //获取商品文案
-    PddGoodsDocumentVo getGoodsDocument(long goods_id);
+    PddGoodsDocumentVO getGoodsDocument(long goods_id);
 
     int deleteByPrimaryKey(Long goodsId);
 
@@ -36,4 +36,6 @@ public interface PddGoodsMapper {
 
     int updateByPrimaryKey(PddGoods record);
 
+    //获取所有的商品id
+    List<Long> getAllGoodsId();
 }

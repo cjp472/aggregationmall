@@ -1,6 +1,7 @@
 body{margin:0;font-size:12px;
     /* line-height:1.5; */line-height:1;
     -webkit-text-size-adjust: 100%!important; /*禁止IOS调整字体大小*/
+    /*box-sizing: border-box;*/
 }
 h1,h2,h3,h4,h5,h6{margin:0;font-size:100%;font-weight:normal;}
 ul,ol{list-style:none;margin:0;padding:0;}

@@ -6,7 +6,7 @@ import com.yunwa.aggregationmall.pojo.pdd.po.PromotionUrl;
 /**
  * 封装的商品文案对象
  */
-public class PddGoodsDocumentVo extends PddGoods {
+public class PddGoodsDocumentVO extends PddGoods {
     private PromotionUrl promotion_url;      //推广链接对象
 
     public PromotionUrl getPromotion_url() {

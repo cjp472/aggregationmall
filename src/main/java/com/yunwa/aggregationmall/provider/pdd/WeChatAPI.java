@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 public class WeChatAPI {
     /**
      * 获取access_token
-     *
      * @param appid
      * @param appSecret
      */
@@ -18,12 +17,26 @@ public class WeChatAPI {
         JSONObject jsonObject = JSONObject.parseObject(result);
         System.out.println(jsonObject.getString("access_token"));
         if (StringUtils.isNotEmpty(jsonObject.getString("errmsg"))) {
-//            logger.error("获取access_token失败:{}", jsonObject.getString("errmsg"));
+            //logger.error("获取access_token失败:{}", jsonObject.getString("errmsg"));
             return null;
         }
         //logger.info("得到的access_token:{}", jsonObject.getString("access_token"));
         return jsonObject.getString("access_token");
     }
 
-    //
+    /*public static String long2short(String long_url){
+        String url = "https://api.weixin.qq.com/cgi-bin/shorturl?access_token=ACCESS_TOKEN";
+        String accessToken = getAccessToken(PddConstantValues.VX_APP_ID, PddConstantValues.VX_APP_SECRET);
+        url = url.replace("ACCESS_TOKEN", accessToken);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("action","long2short");
+        map.put("long_url",long_url);
+        JSONObject jsonObject = HttpJsonWechatUtils.httpRequest(url,"POST", JSON.toJSONString(map));
+
+        String errCode = jsonObject.getString("errcode");
+        return jsonObject.toString();
+    }*/
+
+
 }

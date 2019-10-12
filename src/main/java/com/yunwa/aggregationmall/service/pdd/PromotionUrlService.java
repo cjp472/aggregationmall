@@ -6,4 +6,7 @@ public interface PromotionUrlService {
 
     //获取链接对象
     PromotionUrl getPromotionUrl(long goods_id);
+
+    void insertGoodsUrl();
+
 }

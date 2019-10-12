@@ -19,8 +19,6 @@ $(function () {
         var $goodsInfo = "<div class=\"serch\">\n" +
             "            <div class=\"serch-box\">\n" +
             "                <div class=\"serch-reletive\">\n" +
-            "                   <input class=\"content\"placeholder=\"搜索你想要的宝贝\">\n" +
-            "                   <span class=\"iconfont icon-icon-test ico\" jd='search' style='z-index:99999999'></span>\n" +
             "                </div>\n" +
             "            </div>\n" +
             "        </div>\n" +
@@ -30,9 +28,7 @@ $(function () {
             "                <div class=\"banner-img\" id='banner-img'>\n" +
 
             "                </div>\n" +
-            "                <div class=\"slide-buttle\">\n" +
-            "                    <span class=\"bullter\"></span>\n" +
-            "                </div>\n" +
+
             "            </div>\n" +
             "        </div>\n" +
             "        \n" +
