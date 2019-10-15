@@ -38,4 +38,7 @@ public interface PddGoodsMapper {
 
     //获取所有的商品id
     List<Long> getAllGoodsId();
+
+    //将has_url字段设为1
+    int changeUrlStatus(Long goodsId);
 }

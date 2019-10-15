@@ -8,10 +8,12 @@ import com.yunwa.aggregationmall.provider.pdd.PromotionUrlAPI;
 import com.yunwa.aggregationmall.service.pdd.PromotionUrlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class PromotionUrlServiceImpl implements PromotionUrlService {
     @Autowired
     private PromotionUrlMapper promotionUrlMapper;
@@ -29,7 +31,7 @@ public class PromotionUrlServiceImpl implements PromotionUrlService {
 
     @Override
     public void insertGoodsUrl() {
-        //获取所有商品id
+        //获取所有没有生成推广链接的商品的id
         List<Long> list = pddGoodsMapper.getAllGoodsId();
         //查询到商品的推广链并插入到数据库
         for (Long goodsId : list){
@@ -41,6 +43,8 @@ public class PromotionUrlServiceImpl implements PromotionUrlService {
                     promotion_url_list.get(i).setGoods_id(goodsId);
                     //执行插入操作
                     promotionUrlMapper.insertUrl(promotion_url_list.get(i));
+                    //将goods表的has_url字段设为1
+                    pddGoodsMapper.changeUrlStatus(goodsId);
                 }
             }
         }

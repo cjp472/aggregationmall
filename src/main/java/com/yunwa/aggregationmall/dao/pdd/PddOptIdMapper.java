@@ -1,6 +1,7 @@
 package com.yunwa.aggregationmall.dao.pdd;
 
 import com.yunwa.aggregationmall.pojo.pdd.po.PddOptId;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,4 +27,9 @@ public interface PddOptIdMapper {
     Integer getId(Long optId);
 
     int updateStatus(Integer id);
+
+    PddOptId selectByOptId(Long optId);
+
+    //更新当前页字段
+    int updateCurrentPage(@Param("optId")Long optId, @Param("current_page")Integer current_page);
 }

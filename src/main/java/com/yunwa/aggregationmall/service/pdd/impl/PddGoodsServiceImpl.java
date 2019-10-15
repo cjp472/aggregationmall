@@ -16,10 +16,12 @@ import com.pdd.pop.sdk.http.api.response.PddDdkGoodsPromotionUrlGenerateResponse
 import com.pdd.pop.sdk.http.api.response.PddDdkGoodsSearchResponse;
 import com.yunwa.aggregationmall.constant.PddConstantValues;
 import com.yunwa.aggregationmall.dao.pdd.PddGoodsMapper;
+import com.yunwa.aggregationmall.dao.pdd.PddGoodsTaskMapper;
 import com.yunwa.aggregationmall.dao.pdd.PddOptIdMapper;
 import com.yunwa.aggregationmall.dao.pdd.PromotionUrlMapper;
 import com.yunwa.aggregationmall.pojo.pdd.dto.PddGoodsDto;
 import com.yunwa.aggregationmall.pojo.pdd.po.PddGoods;
+import com.yunwa.aggregationmall.pojo.pdd.po.PddGoodsTask;
 import com.yunwa.aggregationmall.pojo.pdd.po.PddOptId;
 import com.yunwa.aggregationmall.pojo.pdd.po.PromotionUrl;
 import com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVO;
@@ -27,6 +29,9 @@ import com.yunwa.aggregationmall.provider.pdd.GoodsAPI;
 import com.yunwa.aggregationmall.provider.pdd.GoodsPicUrlAPI;
 import com.yunwa.aggregationmall.provider.pdd.PromotionUrlAPI;
 import com.yunwa.aggregationmall.service.pdd.PddGoodsService;
+import com.yunwa.aggregationmall.utils.SalesTipUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +62,12 @@ public class PddGoodsServiceImpl implements PddGoodsService {
     @Autowired
     private PddOptIdMapper pddOptIdMapper;
 
+    @Autowired
+    private PddGoodsTaskMapper pddGoodsTaskMapper;
+
+    @Autowired
+    private SalesTipUtils salesTipUtils;
+
     /*@Value("${pdd.client.id}")
     private String clientId;
 
@@ -65,171 +76,106 @@ public class PddGoodsServiceImpl implements PddGoodsService {
 
     //发送请求的客户端对象
     PopClient client = new PopHttpClient(PddConstantValues.clientId, PddConstantValues.clientSecret);
-    //PopClient client = new PopHttpClient(clientId, clientSecret);
 
+    Logger logger = LoggerFactory.getLogger(PddGoodsServiceImpl.class);
     /**
      * 获取拼多多商品数据
      * @pdd.ddk.goods.search
      * @return
      */
-    /*public String goodsSearch(){
-        for (int i=0; i<PddConstantValues.OPT_IDS.length; i++){
-            for (int j=0; j<10; j++){
-                //调用商品接口，获取商品DTO对象
+    public String goodsSearch() {
+        //查询商品任务表的最后一条记录
+        PddGoodsTask pddGoodsTask = pddGoodsTaskMapper.selectLastTask();
+        //获取商品类目id串
+        String optIdString = pddGoodsTask.getOpt_id();
+        //需要调用的接口次数 （获取期望的商品数量/100)
+        Integer callNum = pddGoodsTask.getGoods_num() / 100;
+        //id串转换成数组
+        String[] optIds = optIdString.split(",");
+        //每个类目需要调用的接口次数
+        Integer optCallNum = (callNum / optIds.length) % 2 == 0 ? callNum / optIds.length : callNum / optIds.length + 1;
+        //转换成Long类型
+        ArrayList<Long> optIdList = new ArrayList<>();
+        for (int k = 0; k < optIds.length; k++) {
+            optIdList.add(Long.valueOf(optIds[k]));
+        }
+        logger.info("callNum={}, optCallNum={}", callNum, optCallNum);
 
-                List<PddGoodsDto> list = goodsAPI.getGoodsData(PddConstantValues.OPT_IDS[i], j+1);
+        //遍历类目集合，爬取商品数据
+        for (Long optId : optIdList) {
+            //获取当前的类目信息
+            PddOptId pddOptId = pddOptIdMapper.selectByOptId(optId);
+            if (pddOptId != null) {
+                Integer total_page_count = pddOptId.getTotal_page_count(); //总页数
+                Integer current_page = pddOptId.getCurrent_page();    //当前页
+                //遍历调用接口查询商品数据
+                for (int j = 0; j < optCallNum; j++) {
 
-                //遍历商品DTO对象集合将销量转换为相应的数值类型、设置轮播图属性然后赋值给商品对象
-                List<PddGoods> pddGoodsList = new ArrayList<PddGoods>();
-                if (list != null){
-                    for (PddGoodsDto goods : list){
-                        //获取销量值
-                        String getSales_tip = goods.getSales_tip();
-                        //判断字符串包不包含“万”字
-                        if (getSales_tip.indexOf("万") != -1){
-                            //只保留“万”字前面的数据
-                            //getSales_tip = getSales_tip.substring(0, getSales_tip.length() - 1);
-                            getSales_tip = getSales_tip.split("万")[0];
-                            //转换为相应的数值型
-                            Integer sales_tip = (int)(Double.valueOf(getSales_tip) * 10000);
-                            //再将数据转换为String类型并去掉小数点然后赋值给商品DTO对象
-                            //getSales_tip = sales_tip.toString().split(".")[0];
-                            goods.setSales_tip(sales_tip.toString());
-                        }else if (getSales_tip.indexOf("+") != -1){
-                            //没万字但是有“+”号的情况
-                            getSales_tip = getSales_tip.replace("+", "");
-                            goods.setSales_tip(getSales_tip);
+                    if (current_page > total_page_count) {
+                        //将当前类目的当前页置为1
+                        pddOptIdMapper.updateCurrentPage(optId, 1);
+                        break;   //进行下一个类目的遍历
+                    }
+
+                    HashMap<String, Object> goodsData = goodsAPI.getGoodsData(optId, current_page);
+                    current_page++;
+
+                    //接口调用错误的情况
+                    if ((int) goodsData.get("code") == 0) {
+                        continue;
+                    } else if ((int)goodsData.get("code") == 1){    //无商品的情况
+                        //重置该类目的数据，爬取下一个类目的数据
+                        pddOptIdMapper.updateCurrentPage(optId, 1);
+                        break;
+                    }
+                    //获取商品DTO对象
+                    List<PddGoodsDto> list = (List<PddGoodsDto>) goodsData.get("data");
+                    //遍历商品DTO对象集合将销量转换为相应的数值类型、设置轮播图属性然后赋值给商品对象
+                    List<PddGoods> pddGoodsList = new ArrayList<PddGoods>();
+                    if (list != null){
+
+                        for (PddGoodsDto goods : list){
+                            //获取销量值
+                            String getSales_tip = goods.getSales_tip();
+                            //转换为纯数字形式的字符串
+                            String _getSales_tip = salesTipUtils.chengeToSalesNum(getSales_tip);
+                            //设置商品销量
+                            goods.setSales_tip(_getSales_tip);
+
+                            //获取商品轮播图
+                            String goods_gallery_urls = (String) this.getGoodsPicUrls(goods);
+                            goods.setGoods_gallery_urls(goods_gallery_urls);
+
+                            //将商品DTO对象复制给商品对象
+                            PddGoods pddGoods = new PddGoods();
+                            BeanUtils.copyProperties(goods,  pddGoods);
+
+                            //sales_tip类型不匹配无法自动复制，这里手动复制
+                            pddGoods.setSales_tip(Integer.parseInt(goods.getSales_tip()));
+                            pddGoodsList.add(pddGoods);
                         }
 
-                        //获取商品轮播图
-                        String goods_gallery_urls = (String) this.getGoodsPicUrls(goods);
-                        goods.setGoods_gallery_urls(goods_gallery_urls);
+                        //遍历商品集合，将推广位id赋给商品对象同时执行插入操作
+                        for (PddGoods pddGoods : pddGoodsList){
+                            pddGoods.setP_id(PddConstantValues.P_ID);
 
-                        //将商品DTO对象复制给商品对象
-                        PddGoods pddGoods = new PddGoods();
-                        BeanUtils.copyProperties(goods,  pddGoods);
+                            //设置商品的真实价格(原价减优惠券)
+                            Long real_price = pddGoods.getMin_group_price() - pddGoods.getCoupon_discount();
+                            pddGoods.setReal_price(real_price);
 
-                        //sales_tip类型不匹配无法自动复制，这里手动复制
-                        pddGoods.setSales_tip(Integer.parseInt(goods.getSales_tip()));
-                        pddGoodsList.add(pddGoods);
+                            //将商品数据插入到数据库
+                            pddGoodsMapper.insertPddGoodsData(pddGoods);
+                        }
+                        logger.info("number={}", pddGoodsList.size());
                     }
-
-                    //遍历商品集合，将推广位id赋给商品对象同时执行插入操作
-                    for (PddGoods pddGoods : pddGoodsList){
-                        pddGoods.setP_id(PddConstantValues.P_ID);
-
-                        //设置商品的真实价格(原价减优惠券)
-                        Long real_price = pddGoods.getMin_group_price() - pddGoods.getCoupon_discount();
-                        pddGoods.setReal_price(real_price);
-
-                        //将商品数据插入到数据库
-                        pddGoodsMapper.insertPddGoodsData(pddGoods);
-                    }
-
-                    //遍历商品集合，并生成对应的推广链接
-                    this.getUrls(PddConstantValues.P_ID, pddGoodsList);
-                }else {
-                    continue;
                 }
+                //一个分类今天的次数爬取完，更新当前页字段
+                pddOptIdMapper.updateCurrentPage(optId, current_page);
             }
         }
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("status", 200);
-        return JSON.toJSONString(map);
-    }*/
-
-    public String goodsSearch(){
-        PddOptId pddOptId = pddOptIdMapper.selectIsGoing();
-        Long optId = pddOptId.getOpt_id();      //类目id
-        Integer total_page_count = pddOptId.getTotal_page_count(); //总页数
-        Integer current_page = pddOptId.getCurrent_page();    //当前页
-
-        for (; current_page<total_page_count; current_page++){
-            //调用商品接口，获取商品DTO对象
-            HashMap<String, Object> goodsData = goodsAPI.getGoodsData(optId, current_page);
-
-            //接口调用错误的情况（如今日次数已用完）
-            if ((int)goodsData.get("code") == 0){
-                return "";
-            }else if ((int)goodsData.get("code") == 1){ //无商品的情况
-                //当前是在最后一个分类的情况
-                if (optId == 2048){
-                    //把各数据重置
-                    pddOptIdMapper.update(optId);
-                    //把第一个分类改为在进行中状态，然后爬取
-                    pddOptIdMapper.updateStatus(58);
-                    this.goodsSearch();
-                }else { //当前不是在最后一个分类的情况
-                    //把各数据重置
-                    pddOptIdMapper.update(optId);
-                    //查询出当前分类的id
-                    Integer id = pddOptIdMapper.getId(optId);
-                    //将当前分类的下一个分类改为进行中的状态，然后爬取
-                    pddOptIdMapper.updateStatus(id+1);
-                    this.goodsSearch();
-                }
-            }
-
-            //获取商品DTO对象
-            List<PddGoodsDto> list = (List<PddGoodsDto>) goodsData.get("data");
-
-            //遍历商品DTO对象集合将销量转换为相应的数值类型、设置轮播图属性然后赋值给商品对象
-            List<PddGoods> pddGoodsList = new ArrayList<PddGoods>();
-            if (list != null){
-                for (PddGoodsDto goods : list){
-                    //获取销量值
-                    String getSales_tip = goods.getSales_tip();
-                    //判断字符串包不包含“万”字
-                    if (getSales_tip.indexOf("万") != -1){
-                        //只保留“万”字前面的数据
-                        //getSales_tip = getSales_tip.substring(0, getSales_tip.length() - 1);
-                        getSales_tip = getSales_tip.split("万")[0];
-                        //转换为相应的数值型
-                        Integer sales_tip = (int)(Double.valueOf(getSales_tip) * 10000);
-                        //再将数据转换为String类型并去掉小数点然后赋值给商品DTO对象
-                        //getSales_tip = sales_tip.toString().split(".")[0];
-                        goods.setSales_tip(sales_tip.toString());
-                    }else if (getSales_tip.indexOf("+") != -1){
-                        //没万字但是有“+”号的情况
-                        getSales_tip = getSales_tip.replace("+", "");
-                        goods.setSales_tip(getSales_tip);
-                    }
-
-                    //获取商品轮播图
-                    String goods_gallery_urls = (String) this.getGoodsPicUrls(goods);
-                    goods.setGoods_gallery_urls(goods_gallery_urls);
-
-                    //将商品DTO对象复制给商品对象
-                    PddGoods pddGoods = new PddGoods();
-                    BeanUtils.copyProperties(goods,  pddGoods);
-
-                    //sales_tip类型不匹配无法自动复制，这里手动复制
-                    pddGoods.setSales_tip(Integer.parseInt(goods.getSales_tip()));
-                    pddGoodsList.add(pddGoods);
-                }
-
-                //遍历商品集合，将推广位id赋给商品对象同时执行插入操作
-                for (PddGoods pddGoods : pddGoodsList){
-                    pddGoods.setP_id(PddConstantValues.P_ID);
-
-                    //设置商品的真实价格(原价减优惠券)
-                    Long real_price = pddGoods.getMin_group_price() - pddGoods.getCoupon_discount();
-                    pddGoods.setReal_price(real_price);
-
-                    //将商品数据插入到数据库
-                    pddGoodsMapper.insertPddGoodsData(pddGoods);
-                }
-
-                //遍历商品集合，并生成对应的推广链接
-                //this.getUrls(PddConstantValues.P_ID, pddGoodsList);
-            }else {
-                continue;
-            }
-        }
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("status", 200);
-        return JSON.toJSONString(map);
+        return "ok";
     }
+
 
     /**
      *获取商品轮播图，pdd.PddGoods.detail.get
@@ -249,28 +195,6 @@ public class PddGoodsServiceImpl implements PddGoodsService {
         }
         return  picUrls;
     }
-
-    /**
-     * 获取商品推广手机推广链接和手机推广短连接
-     * @param p_id  推广位id
-     * @param list 商品对象集合
-     * @return
-     */
-    /*public void getUrls(String p_id, List<PddGoods> list){
-        //获取商品推广链接对象集合
-        List<PromotionUrl> promotion_url_list = promotionUrlAPI.getPromotionURL(p_id, list);
-
-        //遍历插入到数据库
-        if (promotion_url_list != null){
-            for (int i=0; i<promotion_url_list.size(); i++){
-                //设置商品id
-                promotion_url_list.get(i).setGoods_id(list.get(i).getGoods_id());
-                //执行插入操作
-                promotionUrlMapper.insertUrl(promotion_url_list.get(i));
-            }
-        }
-
-    }*/
 
     /**
      * 删除商品

@@ -107,8 +107,12 @@
     </select>
 
     <select id="getAllGoodsId" resultType="long">
-        SELECT goods_id FROM pdd_goods
+        SELECT goods_id FROM pdd_goods WHERE has_url = 0
     </select>
+    
+    <update id="changeUrlStatus" parameterType="long">
+        UPDATE pdd_goods SET has_url = 1 WHERE goods_id = #{goods_id}
+    </update>
 
   <!--<insert jd="insertSelective" parameterType="com.yunwa.aggregationion.pojo.po.PddGoods">
     insert into pdd_goods

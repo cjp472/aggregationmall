@@ -28,7 +28,7 @@ public class PddConstantValues {
                                            11632L, 2048L };                             //汽车
 
     //推广位id
-    public final static String P_ID = "9192384_112642534";
+    public final static String P_ID = "9192384_115423695";
 
     //缩短链接网的key
     public final static String SUO_KEY = "5d9d99208e676d2de3714ebe@f4a2b029654809114acc033a77e2118c";

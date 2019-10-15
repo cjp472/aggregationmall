@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/aggregation_mall?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: root
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+server:
+  port: 8088
+  servlet:
+    context-path: /aggmall
+
+pdd:
+  client:
+    id: 3ebe31a78aee470189690aa9e1cf9317
+    secret: 75cffb0c91451a6b177d2de5ba2036e51685f668

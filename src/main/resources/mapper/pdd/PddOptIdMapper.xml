@@ -53,7 +53,20 @@
         SET `is_going` = 1
         WHERE `id` = #{id,jdbcType=INTEGER}
     </update>
+    
+    <select id="selectByOptId" parameterType="java.lang.Long" resultType="com.yunwa.aggregationmall.pojo.pdd.po.PddOptId">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM `pdd_opt_id`
+        WHERE `opt_id` = #{opt_id,jdbcType=INTEGER}
+    </select>
 
+    <!--更新当前页字段-->
+    <update id="updateCurrentPage">
+        UPDATE `pdd_opt_id`
+        SET `current_page` = #{current_page}
+        WHERE `opt_id` = #{optId}
+    </update>
   <!--<insert id="insertSelective" parameterType="com.yunwa.aggregationmall.pojo.pdd.po.PddOptId">
     insert into pdd_opt_id
     <trim prefix="(" suffix=")" suffixOverrides=",">
