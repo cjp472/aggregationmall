@@ -19,18 +19,15 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 public class UserGoodsController {
-
     @Autowired
     private PddGoodsService pddGoodsService;
-
     @Autowired
     private PromotionUrlService promotionUrlService;
-
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private UrlUtils urlUtils;
+
     /**
      * 首页查询商品
      * @param pageNum   当前页
@@ -54,7 +51,6 @@ public class UserGoodsController {
         if (keyword != null){
             map.put("keyword", keyword);
         }
-        System.out.println(map.toString());
         return pddGoodsService.getGoodsList(pageNum, map);
     }
 

@@ -1,8 +1,10 @@
 package com.yunwa.aggregationmall;
 
 import com.yunwa.aggregationmall.provider.pdd.WeChatAPI;
+import com.yunwa.aggregationmall.provider.tb.TCommandAPI;
 import com.yunwa.aggregationmall.service.pdd.impl.PidServiceImpl;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,9 @@ public class test {
         strings.add(0, "a");
         strings.add(1, "b");
         adminService.getPid(2, strings);*/
-        WeChatAPI.getAccessToken("wx956068d954f63185", "434f4cc794e4cb9b5fd7ee32894a8653" );
+        //WeChatAPI.getAccessToken("wx956068d954f63185", "434f4cc794e4cb9b5fd7ee32894a8653" );
+        TCommandAPI tCommandAPI = new TCommandAPI();
+        //String tCommand = tCommandAPI.createTCommand("www.baidu.com", "测试！测试！测试！");
+        //System.out.println(tCommand);
     }
 }

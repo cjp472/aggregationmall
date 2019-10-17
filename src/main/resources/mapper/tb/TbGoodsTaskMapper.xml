@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunwa.aggregationmall.dao.tb.TbGoodsTaskMapper">
+
+  <resultMap id="BaseResultMap" type="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsTask">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="opt_name" jdbcType="VARCHAR" property="optName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="goods_num" jdbcType="INTEGER" property="goodsNum" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, opt_name, create_time, goods_num
+  </sql>
+
+  <!--获取任务表的最后一条记录-->
+  <select id="getLastRecord" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM `tb_goods_task` ORDER BY id DESC LIMIT 1
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_goods_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_goods_task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsTask">
+    insert into tb_goods_task (id, opt_name, create_time, 
+      goods_num)
+    values (#{id,jdbcType=INTEGER}, #{optName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{goodsNum,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsTask">
+    insert into tb_goods_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="optName != null">
+        opt_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="goodsNum != null">
+        goods_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="optName != null">
+        #{optName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsNum != null">
+        #{goodsNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsTask">
+    update tb_goods_task
+    <set>
+      <if test="optName != null">
+        opt_name = #{optName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsNum != null">
+        goods_num = #{goodsNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsTask">
+    update tb_goods_task
+    set opt_name = #{optName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      goods_num = #{goodsNum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

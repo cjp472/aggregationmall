@@ -3,10 +3,10 @@ package com.yunwa.aggregationmall.pojo.pdd.vo;
 //拼多多返佣对象
 public class PddPromotionAmountVO {
     private Integer order_count;        //订单数
-    private Long predict_promotion;     //可提现佣金
-    private Long real_promotion;        //提现中佣金
+    private Long predict_promotion;     //可提现佣金（总金额）
+    private Long real_promotion;        //提现中佣金（本次返现金额，审核通过）
     private Long surplus_promotion;     //未收货佣金
-    private Long frozen_promotion;      //被冻结佣金
+    private Long frozen_promotion;      //被冻结佣金（已确认收货，审核中）
 
     public Long getFrozen_promotion() {
         return frozen_promotion;

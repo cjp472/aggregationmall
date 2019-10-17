@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunwa.aggregationmall.dao.tb.TbSearchParaMapper">
+
+  <resultMap id="BaseResultMap" type="com.yunwa.aggregationmall.pojo.tb.po.TbSearchPara">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="start_tk_rate" jdbcType="BIGINT" property="startTkRate" />
+    <result column="sort" jdbcType="VARCHAR" property="sort" />
+    <result column="adzone_id" jdbcType="BIGINT" property="adzoneId" />
+    <result column="need_free_shipment" jdbcType="BIT" property="needFreeShipment" />
+    <result column="is_tmall" jdbcType="BIT" property="isTmall" />
+    <result column="has_coupon" jdbcType="BIT" property="hasCoupon" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, start_tk_rate, sort, adzone_id, need_free_shipment, is_tmall, has_coupon, create_time, 
+    modify_time
+  </sql>
+
+    <!--获取最后一条记录-->
+    <select id="getLastRecord" resultMap="BaseResultMap">
+      SELECT
+        <include refid="Base_Column_List" />
+      FROM `tb_search_para` ORDER BY id DESC LIMIT 1
+    </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_search_para
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_search_para
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbSearchPara">
+    insert into tb_search_para (id, start_tk_rate, sort, 
+      adzone_id, need_free_shipment, is_tmall, 
+      has_coupon, create_time, modify_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{startTkRate,jdbcType=BIGINT}, #{sort,jdbcType=VARCHAR}, 
+      #{adzoneId,jdbcType=BIGINT}, #{needFreeShipment,jdbcType=BIT}, #{isTmall,jdbcType=BIT}, 
+      #{hasCoupon,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbSearchPara">
+    insert into tb_search_para
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="startTkRate != null">
+        start_tk_rate,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="adzoneId != null">
+        adzone_id,
+      </if>
+      <if test="needFreeShipment != null">
+        need_free_shipment,
+      </if>
+      <if test="isTmall != null">
+        is_tmall,
+      </if>
+      <if test="hasCoupon != null">
+        has_coupon,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="startTkRate != null">
+        #{startTkRate,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="adzoneId != null">
+        #{adzoneId,jdbcType=BIGINT},
+      </if>
+      <if test="needFreeShipment != null">
+        #{needFreeShipment,jdbcType=BIT},
+      </if>
+      <if test="isTmall != null">
+        #{isTmall,jdbcType=BIT},
+      </if>
+      <if test="hasCoupon != null">
+        #{hasCoupon,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbSearchPara">
+    update tb_search_para
+    <set>
+      <if test="startTkRate != null">
+        start_tk_rate = #{startTkRate,jdbcType=BIGINT},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="adzoneId != null">
+        adzone_id = #{adzoneId,jdbcType=BIGINT},
+      </if>
+      <if test="needFreeShipment != null">
+        need_free_shipment = #{needFreeShipment,jdbcType=BIT},
+      </if>
+      <if test="isTmall != null">
+        is_tmall = #{isTmall,jdbcType=BIT},
+      </if>
+      <if test="hasCoupon != null">
+        has_coupon = #{hasCoupon,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbSearchPara">
+    update tb_search_para
+    set start_tk_rate = #{startTkRate,jdbcType=BIGINT},
+      sort = #{sort,jdbcType=VARCHAR},
+      adzone_id = #{adzoneId,jdbcType=BIGINT},
+      need_free_shipment = #{needFreeShipment,jdbcType=BIT},
+      is_tmall = #{isTmall,jdbcType=BIT},
+      has_coupon = #{hasCoupon,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

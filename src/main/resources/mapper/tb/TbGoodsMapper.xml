@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunwa.aggregationmall.dao.tb.TbGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.yunwa.aggregationmall.pojo.tb.po.TbGoods">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="item_id" jdbcType="BIGINT" property="itemId" />
+    <result column="short_title" jdbcType="VARCHAR" property="shortTitle" />
+    <result column="coupon_start_time" jdbcType="VARCHAR" property="couponStartTime" />
+    <result column="coupon_end_time" jdbcType="VARCHAR" property="couponEndTime" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="pict_url" jdbcType="VARCHAR" property="pictUrl" />
+    <result column="zk_final_price" jdbcType="VARCHAR" property="zkFinalPrice" />
+    <result column="item_url" jdbcType="VARCHAR" property="itemUrl" />
+    <result column="commission_rate" jdbcType="VARCHAR" property="commissionRate" />
+    <result column="volume" jdbcType="BIGINT" property="volume" />
+    <result column="shop_title" jdbcType="VARCHAR" property="shopTitle" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="coupon_amount" jdbcType="VARCHAR" property="couponAmount" />
+    <result column="coupon_start_fee" jdbcType="VARCHAR" property="couponStartFee" />
+    <result column="t_command" jdbcType="VARCHAR" property="tCommand" />
+    <result column="real_price" jdbcType="DOUBLE" property="realPrice" />
+    <result column="user_type" jdbcType="INTEGER" property="userType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="total_promotion" jdbcType="DOUBLE" property="totalPromotion" />
+    <result column="coupon_share_url" jdbcType="VARCHAR" property="couponShareUrl" />
+  </resultMap>
+
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs">
+    <result column="small_images" jdbcType="LONGVARCHAR" property="smallImages" />
+    <result column="item_description" jdbcType="LONGVARCHAR" property="itemDescription" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, item_id, short_title, coupon_start_time, coupon_end_time, title, pict_url, zk_final_price,
+    item_url, commission_rate, volume, shop_title, url, coupon_amount, coupon_start_fee,
+    t_command, real_price, user_type, create_time, total_promotion, coupon_share_url
+  </sql>
+
+  <sql id="Blob_Column_List">
+    small_images, item_description
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_goods
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_goods
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs">
+    insert ignore into tb_goods (item_id, short_title,
+      coupon_start_time, coupon_end_time, title,
+      pict_url, zk_final_price, item_url,
+      commission_rate, volume, shop_title,
+      url, coupon_amount, coupon_start_fee,
+      t_command, real_price, user_type,
+      total_promotion, small_images,
+      item_description, coupon_share_url, level_one_category_name)
+    values (#{itemId,jdbcType=BIGINT}, #{shortTitle,jdbcType=VARCHAR},
+      #{couponStartTime,jdbcType=VARCHAR}, #{couponEndTime,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+      #{pictUrl,jdbcType=VARCHAR}, #{zkFinalPrice,jdbcType=VARCHAR}, #{itemUrl,jdbcType=VARCHAR},
+      #{commissionRate,jdbcType=VARCHAR}, #{volume,jdbcType=BIGINT}, #{shopTitle,jdbcType=VARCHAR},
+      #{url}, #{couponAmount,jdbcType=VARCHAR}, #{couponStartFee,jdbcType=VARCHAR},
+      #{tCommand,jdbcType=VARCHAR}, #{realPrice,jdbcType=DOUBLE}, #{userType,jdbcType=INTEGER},
+      #{totalPromotion,jdbcType=DOUBLE}, #{smallImages,jdbcType=LONGVARCHAR},
+      #{itemDescription,jdbcType=LONGVARCHAR}, #{couponShareUrl}, #{categoryName})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs">
+    insert into tb_goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="itemId != null">
+        item_id,
+      </if>
+      <if test="shortTitle != null">
+        short_title,
+      </if>
+      <if test="couponStartTime != null">
+        coupon_start_time,
+      </if>
+      <if test="couponEndTime != null">
+        coupon_end_time,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="pictUrl != null">
+        pict_url,
+      </if>
+      <if test="zkFinalPrice != null">
+        zk_final_price,
+      </if>
+      <if test="itemUrl != null">
+        item_url,
+      </if>
+      <if test="commissionRate != null">
+        commission_rate,
+      </if>
+      <if test="volume != null">
+        volume,
+      </if>
+      <if test="shopTitle != null">
+        shop_title,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="couponAmount != null">
+        coupon_amount,
+      </if>
+      <if test="couponStartFee != null">
+        coupon_start_fee,
+      </if>
+      <if test="tCommand != null">
+        t_command,
+      </if>
+      <if test="realPrice != null">
+        real_price,
+      </if>
+      <if test="userType != null">
+        user_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="totalPromotion != null">
+        total_promotion,
+      </if>
+      <if test="smallImages != null">
+        small_images,
+      </if>
+      <if test="itemDescription != null">
+        item_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null">
+        #{itemId,jdbcType=BIGINT},
+      </if>
+      <if test="shortTitle != null">
+        #{shortTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="couponStartTime != null">
+        #{couponStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="couponEndTime != null">
+        #{couponEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="pictUrl != null">
+        #{pictUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="zkFinalPrice != null">
+        #{zkFinalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="itemUrl != null">
+        #{itemUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionRate != null">
+        #{commissionRate,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null">
+        #{volume,jdbcType=BIGINT},
+      </if>
+      <if test="shopTitle != null">
+        #{shopTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="couponAmount != null">
+        #{couponAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="couponStartFee != null">
+        #{couponStartFee,jdbcType=VARCHAR},
+      </if>
+      <if test="tCommand != null">
+        #{tCommand,jdbcType=VARCHAR},
+      </if>
+      <if test="realPrice != null">
+        #{realPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="userType != null">
+        #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalPromotion != null">
+        #{totalPromotion,jdbcType=DOUBLE},
+      </if>
+      <if test="smallImages != null">
+        #{smallImages,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="itemDescription != null">
+        #{itemDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs">
+    update tb_goods
+    <set>
+      <if test="itemId != null">
+        item_id = #{itemId,jdbcType=BIGINT},
+      </if>
+      <if test="shortTitle != null">
+        short_title = #{shortTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="couponStartTime != null">
+        coupon_start_time = #{couponStartTime,jdbcType=VARCHAR},
+      </if>
+      <if test="couponEndTime != null">
+        coupon_end_time = #{couponEndTime,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="pictUrl != null">
+        pict_url = #{pictUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="zkFinalPrice != null">
+        zk_final_price = #{zkFinalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="itemUrl != null">
+        item_url = #{itemUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionRate != null">
+        commission_rate = #{commissionRate,jdbcType=VARCHAR},
+      </if>
+      <if test="volume != null">
+        volume = #{volume,jdbcType=BIGINT},
+      </if>
+      <if test="shopTitle != null">
+        shop_title = #{shopTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="couponAmount != null">
+        coupon_amount = #{couponAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="couponStartFee != null">
+        coupon_start_fee = #{couponStartFee,jdbcType=VARCHAR},
+      </if>
+      <if test="tCommand != null">
+        t_command = #{tCommand,jdbcType=VARCHAR},
+      </if>
+      <if test="realPrice != null">
+        real_price = #{realPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="userType != null">
+        user_type = #{userType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalPromotion != null">
+        total_promotion = #{totalPromotion,jdbcType=DOUBLE},
+      </if>
+      <if test="smallImages != null">
+        small_images = #{smallImages,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="itemDescription != null">
+        item_description = #{itemDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs">
+    update tb_goods
+    set item_id = #{itemId,jdbcType=BIGINT},
+      short_title = #{shortTitle,jdbcType=VARCHAR},
+      coupon_start_time = #{couponStartTime,jdbcType=VARCHAR},
+      coupon_end_time = #{couponEndTime,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      pict_url = #{pictUrl,jdbcType=VARCHAR},
+      zk_final_price = #{zkFinalPrice,jdbcType=VARCHAR},
+      item_url = #{itemUrl,jdbcType=VARCHAR},
+      commission_rate = #{commissionRate,jdbcType=VARCHAR},
+      volume = #{volume,jdbcType=BIGINT},
+      shop_title = #{shopTitle,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      coupon_amount = #{couponAmount,jdbcType=VARCHAR},
+      coupon_start_fee = #{couponStartFee,jdbcType=VARCHAR},
+      t_command = #{tCommand,jdbcType=VARCHAR},
+      real_price = #{realPrice,jdbcType=DOUBLE},
+      user_type = #{userType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      total_promotion = #{totalPromotion,jdbcType=DOUBLE},
+      small_images = #{smallImages,jdbcType=LONGVARCHAR},
+      item_description = #{itemDescription,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoods">
+    update tb_goods
+    set item_id = #{itemId,jdbcType=BIGINT},
+      short_title = #{shortTitle,jdbcType=VARCHAR},
+      coupon_start_time = #{couponStartTime,jdbcType=VARCHAR},
+      coupon_end_time = #{couponEndTime,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      pict_url = #{pictUrl,jdbcType=VARCHAR},
+      zk_final_price = #{zkFinalPrice,jdbcType=VARCHAR},
+      item_url = #{itemUrl,jdbcType=VARCHAR},
+      commission_rate = #{commissionRate,jdbcType=VARCHAR},
+      volume = #{volume,jdbcType=BIGINT},
+      shop_title = #{shopTitle,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      coupon_amount = #{couponAmount,jdbcType=VARCHAR},
+      coupon_start_fee = #{couponStartFee,jdbcType=VARCHAR},
+      t_command = #{tCommand,jdbcType=VARCHAR},
+      real_price = #{realPrice,jdbcType=DOUBLE},
+      user_type = #{userType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      total_promotion = #{totalPromotion,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

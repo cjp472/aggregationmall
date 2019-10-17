@@ -4,11 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.yunwa.aggregationmall.dao.pdd.NotCpsOrderMapper;
 import com.yunwa.aggregationmall.dao.pdd.PddOrderMapper;
+import com.yunwa.aggregationmall.dao.pdd.PddPromotionRateMapper;
 import com.yunwa.aggregationmall.pojo.pdd.dto.OrderDto;
 import com.yunwa.aggregationmall.pojo.pdd.po.PddOrder;
 import com.yunwa.aggregationmall.pojo.pdd.vo.PddPromotionAmountVO;
 import com.yunwa.aggregationmall.provider.pdd.OrderAPI;
 import com.yunwa.aggregationmall.service.pdd.OrderService;
+import com.yunwa.aggregationmall.service.pdd.PddPromotionRateService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,12 @@ import java.util.Map;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private PddOrderMapper pddOrderMapper;
-
     @Autowired
     private OrderAPI orderAPI;
-
     @Autowired
     private NotCpsOrderMapper notCpsOrderMapper;
+    @Autowired
+    private PddPromotionRateMapper pddPromotionRateMapper;
 
     /**
      * 订单绑定
@@ -65,8 +67,10 @@ public class OrderServiceImpl implements OrderService {
                         BeanUtils.copyProperties(orderDto, pddOrder);
                         //获得总佣金
                         Long promotion_amount = pddOrder.getPromotion_amount();
+                        //查询出佣金比例
+                        Double rate = pddPromotionRateMapper.selectLastRate();
                         //设置用户的佣金
-                        pddOrder.setReal_promotion_amount(Math.round(promotion_amount * 0.5));
+                        pddOrder.setReal_promotion_amount(Math.round(promotion_amount * rate));
                         //设置用户id
                         pddOrder.setUser_id(user_id);
                         pddOrderMapper.insertOrderData(pddOrder);
@@ -106,16 +110,22 @@ public class OrderServiceImpl implements OrderService {
                     e.printStackTrace();
                     map.put("msg", "500");
                 }
-
-                //封装成订单对象
-                PddOrder pddOrder = new PddOrder();
-                BeanUtils.copyProperties(orderDto, pddOrder);
-                //更新订单表
-                pddOrderMapper.updateOrder(pddOrder);
+                //获取订单的状态
+                Integer order_status = orderDto.getOrder_status();
+                if(order_status == 4 || order_status == 8 || order_status == 10){
+                    //删除这几个状态的订单
+                    pddOrderMapper.deleteByOrderSn(order_sn);
+                } else {
+                    //封装成订单对象
+                    PddOrder pddOrder = new PddOrder();
+                    BeanUtils.copyProperties(orderDto, pddOrder);
+                    //更新订单表
+                    pddOrderMapper.updateOrder(pddOrder);
+                }
             }
             //查询拼多多预计返佣及进行中的订单数封装到VO对象
             pddPromotionAmount = pddOrderMapper.selectPddPromotionAmount(user_id);
-            //查询出该用户订单状态为3且返佣状态为1的订单的real_promotion_amount之和(单位 元)-》这是提现中佣金
+            //查询出该用户订单状态为5且返佣状态为1的订单的real_promotion_amount之和(单位 元)-》这是提现中佣金
             Long totalRealPromotionAmount = pddOrderMapper.getTotalRealPromotionAmount(user_id);
             //设置本次返佣
             if (totalRealPromotionAmount == null){
@@ -125,19 +135,20 @@ public class OrderServiceImpl implements OrderService {
             }
             //查询并设置被冻结佣金
             Long frozenPromotion = pddOrderMapper.getFrozenPromotion(user_id);
-            pddPromotionAmount.setFrozen_promotion(frozenPromotion);
+            if (frozenPromotion == null){
+                pddPromotionAmount.setFrozen_promotion(0L);
+            }else {
+                pddPromotionAmount.setFrozen_promotion(frozenPromotion);
+            }
             //计算并设置剩余返佣
             Long surplusPromotion = pddPromotionAmount.getPredict_promotion() - pddPromotionAmount.getReal_promotion() - pddPromotionAmount.getFrozen_promotion();
             pddPromotionAmount.setSurplus_promotion(surplusPromotion);
-            //将改用户订单状态为3的订单的promotion_status字段状态改为0 ->表示已经返佣
+            //将改用户订单状态为5的订单的promotion_status字段状态改为0 ->表示已经返佣
             pddOrderMapper.changePromotionStatus(user_id);
-            //将该用户订单状态为2的订单插入到finish_order表
-            //pddOrderMapper.moveToFinishedOrder(user_id);
-            //删除原表中的数据
-            //pddOrderMapper.deleteFinishedOrder(user_id);
-            /*if (totalRealPromotionAmount == null){
-                return BigDecimal.valueOf(0);
-            }*/
+            //将该用户订单状态为5的订单插入到finish_order表
+            pddOrderMapper.moveToFinishedOrder(user_id);
+            //删除订单表中已返现的订单
+            this.delOrder(user_id);
 
             //获该用户所有的淘宝订单号
             //操作。。。
@@ -152,5 +163,15 @@ public class OrderServiceImpl implements OrderService {
         map.put("data", pddPromotionAmount);
         map.put("msg", "415");
         return JSON.toJSONString(map);
+    }
+
+    /**
+     * 该用户删除已返现订单
+     * @param user_id   用户id
+     * @return  boolean
+     */
+    private void delOrder(String user_id) {
+        //在订单表中删除该用户已返现的订单
+        pddOrderMapper.deleteFinishedOrder(user_id);
     }
 }

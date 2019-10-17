@@ -86,7 +86,7 @@
         SELECT SUM(`real_promotion_amount`)
         FROM`pdd_order`
         WHERE user_id = #{user_id,jdbcType=BIGINT}
-        AND `order_status` = 3 AND `promotion_status` = 1
+        AND `order_status` = 5 AND `promotion_status` = 1
     </select>
 
     <!--将已完成的订单移入finished_order-->
@@ -94,21 +94,21 @@
         insert into `finished_order`
           select * from `pdd_order`
           WHERE user_id = #{user_id,jdbcType=VARCHAR}
-          AND `order_status` = 2
+          AND `order_status` = 5 and `promotion_status` = 0
     </insert>
 
-    <!--删除原表中的数据-->
+    <!--删除订单表中已完成返佣的订单-->
     <delete id="deleteFinishedOrder" parameterType="java.lang.String">
       DELETE FROM `pdd_order`
       WHERE `user_id` = #{user_id,jdbcType=VARCHAR}
-      AND `order_status` = 2
+      AND `order_status` = 5 AND `promotion_status` = 0
     </delete>
 
     <!--更改返佣状态-->
     <update id="changePromotionStatus" parameterType="java.lang.String">
         UPDATE `pdd_order`
         SET `promotion_status` = 0
-        WHERE `order_status` = 3 AND `user_id` = #{user_id,jdbcType=VARCHAR}
+        WHERE `order_status` = 5 AND `user_id` = #{user_id,jdbcType=VARCHAR}
     </update>
 
     <!--查询拼多多返佣-->
@@ -123,6 +123,13 @@
         SELECT SUM(`real_promotion_amount`)
         FROM`pdd_order`
         WHERE user_id = #{user_id,jdbcType=BIGINT}
-        AND `order_status` = 2 AND `promotion_status` = 1
+        AND `promotion_status` = 1
+        AND `order_status` in (2, 3)
     </select>
+
+    <!--删除订单-->
+    <delete id="deleteByOrderSn" parameterType="java.lang.String">
+        DELETE FROM `pdd_order`
+        WHERE `order_sn` = #{order_sn,jdbcType=VARCHAR}
+    </delete>
 </mapper>

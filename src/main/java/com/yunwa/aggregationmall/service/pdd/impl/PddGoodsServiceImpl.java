@@ -46,25 +46,18 @@ public class PddGoodsServiceImpl implements PddGoodsService {
 
     @Autowired
     private PddGoodsMapper pddGoodsMapper;
-
     @Autowired
     private PromotionUrlMapper promotionUrlMapper;
-
     @Autowired
     private GoodsAPI goodsAPI;
-
     @Autowired
     private PromotionUrlAPI promotionUrlAPI;
-
     @Autowired
     private GoodsPicUrlAPI goodsPicUrlAPI;
-
     @Autowired
     private PddOptIdMapper pddOptIdMapper;
-
     @Autowired
     private PddGoodsTaskMapper pddGoodsTaskMapper;
-
     @Autowired
     private SalesTipUtils salesTipUtils;
 
@@ -117,6 +110,7 @@ public class PddGoodsServiceImpl implements PddGoodsService {
                         break;   //进行下一个类目的遍历
                     }
 
+                    //调用接口获取拼多多商品
                     HashMap<String, Object> goodsData = goodsAPI.getGoodsData(optId, current_page);
                     current_page++;
 

@@ -48,4 +48,7 @@ public interface PddOrderMapper {
 
     //查询被冻结佣金
     Long getFrozenPromotion(String user_id);
+
+    //删除订单
+    int deleteByOrderSn(String order_sn);
 }
