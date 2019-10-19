@@ -26,6 +26,24 @@ public class PddGoods implements Serializable {
     private long opt_id;            //商品标签ID
     private String opt_name;        //商品标签名
     private Long real_price;        //券后的真实价格
+    private Long coupon_start_time; //优惠券生效时间,UNIX时间戳
+    private Long coupon_end_time;   //优惠券失效时间,UNIX时间戳
+
+    public Long getCoupon_start_time() {
+        return coupon_start_time;
+    }
+
+    public void setCoupon_start_time(Long coupon_start_time) {
+        this.coupon_start_time = coupon_start_time;
+    }
+
+    public Long getCoupon_end_time() {
+        return coupon_end_time;
+    }
+
+    public void setCoupon_end_time(Long coupon_end_time) {
+        this.coupon_end_time = coupon_end_time;
+    }
 
     public Long getReal_price() {
         return real_price;

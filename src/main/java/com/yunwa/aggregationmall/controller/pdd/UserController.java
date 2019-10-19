@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-public class UserGoodsController {
+public class UserController {
     @Autowired
     private PddGoodsService pddGoodsService;
     @Autowired

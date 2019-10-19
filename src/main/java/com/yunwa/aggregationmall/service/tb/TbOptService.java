@@ -6,6 +6,7 @@ package com.yunwa.aggregationmall.service.tb;
  * @author yueyang
  */
 public interface TbOptService {
-    void getGoodsOptInfo();
+    //void getGoodsOptInfo();
 
+    void updateByOptName(String[] optNames, Long startTkRate, String sort, Long adzoneId, Boolean needFreeShipment, Boolean isTmall, Boolean hasCoupon);
 }

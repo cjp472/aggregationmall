@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/pdd/reset.css">
     <script type="text/javascript" src="js/pdd/jquery.min.js"></script>
     <script type="text/javascript" src="js/pdd/clipboard.min.js"></script>
-    <script type="text/javascript" src="js/pdd/pddDetails.js"></script>
+    <script type="text/javascript" src="js/tb/tbDetails.js"></script>
 </head>
 
 <body>
@@ -84,6 +84,18 @@
                 <div class="syn-show">爱情公寓胡一菲代言品牌，四重密</div>
             </div>
         </div>
+        <!--图文详情-->
+        <div class="img-text">
+            <div class="text-content">
+                <div class="img-text-detail">
+                    <div class="img-text-btn">
+                    <span class="text-btn-span">
+                        查看图文详情
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!--返回圆-->
     <!--<div class="return">
@@ -106,7 +118,7 @@
     <!--尾部固定栏-->
     <div class="footer-fixed">
         <div class="navbar">
-            <<!--a href="index.html" class="navbar-content">-->
+            <!--<a href="index.html" class="navbar-content">-->
             <a href="javascript:;" class="navbar-content" onclick="javascript:history.go(-1);">
                 <p class="sub-img-content">
                     <img src="images/pdd/foot01.png" alt="" class="sub-img-back">
@@ -120,10 +132,10 @@
                 <p class="foot-sub">复制文案</p>
             </a>
         </div>
-        <div class="navbar navbar-btn">
-            <a href="javascript:;" class="foot-btn foot-btn-right">
+        <div class="navbar navbar-btn" id="lq">
+            <!--<a href="javascript:;" class="foot-btn foot-btn-right" >
                 <p class="foot-sub" id="getTicket">立即领券</p>
-            </a>
+            </a>-->
         </div>
     </div>
 
@@ -150,7 +162,6 @@
         </div>
     </div>
 </body>
-
 <!--一键复制功能-->
 <script>
     function copyUrl2() {
@@ -163,6 +174,21 @@
         oInput.className = 'oInput';
         oInput.style.display = 'none';
         //alert('复制成功');
+    }
+    function copyTCommand() {
+        var Url2 = document.getElementById("tCommand").innerHTML;
+        var oInput = document.createElement('input');
+        oInput.value = Url2;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display = 'none';
+
+        //变色
+        document.getElementById('copy-tCommand').classList.add('copy-tCommand')
+        document.getElementById('copy-tCommand').innerHTML ='已复制'
+        alert('复制成功');
     }
 </script>
 </html>

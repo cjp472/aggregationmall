@@ -11,4 +11,6 @@ public interface TbGoodsService {
     void getTbGoodsInfo();
 
     PageInfo<TbGoodsWithBLOBs> getGoodsList(int pageNum, HashMap<String, Object> map);
+
+    TbGoodsWithBLOBs getTbGoodsDetail(Long itemId);
 }

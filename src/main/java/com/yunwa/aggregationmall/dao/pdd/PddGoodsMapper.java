@@ -41,4 +41,7 @@ public interface PddGoodsMapper {
 
     //将has_url字段设为1
     int changeUrlStatus(Long goodsId);
+
+    //删除优惠券过期的商品
+    int deleteOverdueGoods();
 }

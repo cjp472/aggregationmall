@@ -13,9 +13,11 @@ import com.yunwa.aggregationmall.pojo.tb.po.TbOpt;
 import com.yunwa.aggregationmall.pojo.tb.po.TbSearchPara;
 import com.yunwa.aggregationmall.provider.tb.MaterialOptionalAPI;
 import com.yunwa.aggregationmall.service.tb.TbGoodsService;
+import com.yunwa.aggregationmall.service.tb.TbOptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.helpers.ParseConversionEventImpl;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class TbGoodsServiceImpl implements TbGoodsService {
     private TbOptMapper tbOptMapper;
     @Autowired
     private TbGoodsMapper tbGoodsMapper;
+    @Autowired
+    private TbOptService tbOptService;
 
     @Override
     public void getTbGoodsInfo() {
@@ -49,6 +53,9 @@ public class TbGoodsServiceImpl implements TbGoodsService {
         String optNameString = tbGoodsTask.getOptName();
         //转换成分类名数组
         String[] optNames = optNameString.split(",");
+        //更新分类信息
+        tbOptService.updateByOptName(optNames, startTkRate, sort, adzoneId, needFreeShipment,
+                isTmall, hasCoupon);
         //获取期望的商品数量
         Integer goodsNum = tbGoodsTask.getGoodsNum();
         //接口总调用次数
@@ -62,7 +69,8 @@ public class TbGoodsServiceImpl implements TbGoodsService {
             //获取当前分类的信息
             TbOpt tbOpt = tbOptMapper.selectByOptName(optNames[i]);
             Long currentPage = tbOpt.getCurrentPage();   //爬取的当前页
-            Long totalPageCount = tbOpt.getTotalPageCount(); //总页数
+            Long totalPageCount = tbOpt.getTotalPageCount();    //总页数
+            String categoryIdString = tbOpt.getCategoryId();    //分类id串
             //遍历调用接口查询商品数据
             for (int j=0; j<callNum; j++){
                 if (currentPage > totalPageCount) {
@@ -71,7 +79,7 @@ public class TbGoodsServiceImpl implements TbGoodsService {
                     break;   //进行下一个类目的遍历
                 }
                 //调用接口获取淘宝商品
-                List<TbGoodsWithBLOBs> list = materialOptionalAPI.getGoodsData(currentPage, optNames[i], startTkRate, sort, adzoneId,
+                List<TbGoodsWithBLOBs> list = materialOptionalAPI.getGoodsData(currentPage, categoryIdString, startTkRate, sort, adzoneId,
                         needFreeShipment, isTmall, hasCoupon);
                 currentPage++;
                 if (list != null){
@@ -97,6 +105,16 @@ public class TbGoodsServiceImpl implements TbGoodsService {
         PageHelper.startPage(pageNum, TbkConstantValues.pageSize);
         List<TbGoodsWithBLOBs> list =  tbGoodsMapper.selectByPage(map);
         return new PageInfo<>(list);
+    }
+
+    /**
+     * 获取商品详情
+     * @param itemId 商品id
+     * @return 商品实体
+     */
+    @Override
+    public TbGoodsWithBLOBs getTbGoodsDetail(Long itemId) {
+        return tbGoodsMapper.getTbGoodsDetail(itemId);
     }
 
     @Override

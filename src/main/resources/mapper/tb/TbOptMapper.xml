@@ -10,10 +10,11 @@
     <result column="current_page" jdbcType="BIGINT" property="currentPage" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="level_one_category_id" jdbcType="VARCHAR" property="categoryId" />
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, opt_name, total_goods_count, total_page_count, current_page, create_time, modify_time
+    id, opt_name, total_goods_count, total_page_count, current_page, create_time, modify_time, level_one_category_id
   </sql>
 
     <!--根据分类名查询分类信息-->
@@ -29,6 +30,21 @@
         UPDATE `tb_opt`
         SET `current_page` = #{num, jdbcType=BIGINT}, `modify_time` = NOW()
         WHERE `opt_name` = #{optName, jdbcType=VARCHAR}
+    </update>
+
+    <!--根据分类名查询分类id串-->
+  <select id="selectCategoryId" parameterType="java.lang.String" resultType="java.lang.String">
+      SELECT `level_one_category_id`
+      FROM `tb_opt`
+      WHERE `opt_name` = #{optName, jdbcType=VARCHAR}
+  </select>
+
+    <!--更新分类信息-->
+    <update id="updateOptInfo" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbOpt">
+      UPDATE `tb_opt`
+      SET `total_goods_count` = #{totalGoodsCount,jdbcType=BIGINT}, `total_page_count` = #{totalPageCount,jdbcType=BIGINT},
+	    `modify_time` = NOW()
+      WHERE `opt_name` = #{optName, jdbcType=VARCHAR}
     </update>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">

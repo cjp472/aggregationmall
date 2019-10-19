@@ -40,11 +40,11 @@ public class MaterialOptionalAPI {
     TaobaoClient client = new DefaultTaobaoClient(TbkConstantValues.GET__URL, TbkConstantValues.APP_KEY, TbkConstantValues.APP_SERCET);
 
     //获取商品数据
-    public List<TbGoodsWithBLOBs> getGoodsData(Long pageNo, String keyword, Long startTkRate, String sort, Long adzoneId,
+    public List<TbGoodsWithBLOBs> getGoodsData(Long pageNo, String categoryIdString, Long startTkRate, String sort, Long adzoneId,
                                Boolean needFreeShipment, Boolean isTmall, Boolean hasCoupon){
         TbkDgMaterialOptionalRequest req = new TbkDgMaterialOptionalRequest();
         req.setPageNo(pageNo);
-        req.setQ(keyword);
+        req.setCat(categoryIdString);
         req.setPageSize(100L);
         req.setStartTkRate(startTkRate);
         req.setSort(sort);
@@ -92,7 +92,7 @@ public class MaterialOptionalAPI {
                     //商品优惠券面额
                     Double couponAmount = Double.parseDouble(TbGoods.getCouponAmount());
                     //获取商品折扣价
-                    Double zkFinalPrice = Double.parseDouble(TbGoods.getZkFinalPrice());
+                    Double zkFinalPrice = TbGoods.getZkFinalPrice();
                     //设置商品券后价(保留两位小数)
                     Double realPrice = numberConvertUtil.keepTwoDecimals(zkFinalPrice - couponAmount);
                     TbGoods.setRealPrice(realPrice);
@@ -114,8 +114,8 @@ public class MaterialOptionalAPI {
         return list;
     }
 
-    //获取商品分类的数据
-    public TbOpt getGoodsOptData(String keyword, Long startTkRate, String sort, Long adzoneId,
+    //通过分类名获取商品分类的数据
+    /*public TbOpt getGoodsOptData(String keyword, Long startTkRate, String sort, Long adzoneId,
                                   Boolean needFreeShipment, Boolean isTmall, Boolean hasCoupon){
         TbkDgMaterialOptionalRequest req = new TbkDgMaterialOptionalRequest();
         req.setQ(keyword);
@@ -142,6 +142,43 @@ public class MaterialOptionalAPI {
         TbOpt tbOpt = new TbOpt();
         tbOpt.setOptName(keyword);
         tbOpt.setTotalGoodsCount(total_results);
+        return tbOpt;
+    }*/
+
+    //通过分类id串获取商品总数
+    public TbOpt getGoodsOptById(String categoryIdString, Long startTkRate, String sort, Long adzoneId,
+                                 Boolean needFreeShipment, Boolean isTmall, Boolean hasCoupon){
+        TbkDgMaterialOptionalRequest req = new TbkDgMaterialOptionalRequest();
+        req.setCat(categoryIdString);
+        req.setStartTkRate(startTkRate);
+        req.setSort(sort);
+        req.setAdzoneId(adzoneId);
+        req.setNeedFreeShipment(needFreeShipment);
+        req.setIsTmall(isTmall);
+        req.setHasCoupon(hasCoupon);
+        Long total_results = null;
+        String responseBody = null;
+        try {
+            TbkDgMaterialOptionalResponse rsp = client.execute(req);
+            responseBody = rsp.getBody();
+            JSONObject jsonObject = JSON.parseObject(responseBody);
+            JSONObject tbk_dg_material_optional_response = jsonObject.getJSONObject("tbk_dg_material_optional_response");
+            total_results = tbk_dg_material_optional_response.getLong("total_results");
+        } catch (ApiException e) {
+            e.printStackTrace();
+            logger.info("获取商品接口调用异常，分类id串:{}, 返回的数据：{}", categoryIdString, responseBody);
+            return null;
+        }
+        TbOpt tbOpt = new TbOpt();
+        //设置商品总数
+        tbOpt.setTotalGoodsCount(total_results);
+        Long totalPageCount = (tbOpt.getTotalGoodsCount() % 100) == 0 ? tbOpt.getTotalGoodsCount() / 100 :
+                tbOpt.getTotalGoodsCount() / 100 + 1;
+        if (totalPageCount == 0){
+            totalPageCount = 1L;
+        }
+        //设置总分页数
+        tbOpt.setTotalPageCount(totalPageCount);
         return tbOpt;
     }
 

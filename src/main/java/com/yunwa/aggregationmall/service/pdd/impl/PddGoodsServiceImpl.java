@@ -161,7 +161,7 @@ public class PddGoodsServiceImpl implements PddGoodsService {
                             pddGoodsMapper.insertPddGoodsData(pddGoods);
                         }
                         logger.info("number={}", pddGoodsList.size());
-                    }
+                    }//TODO:查询不到数据就直接将当前分类的 `current_page` 字段重置，然后开始下一个循环的遍历
                 }
                 //一个分类今天的次数爬取完，更新当前页字段
                 pddOptIdMapper.updateCurrentPage(optId, current_page);
@@ -235,5 +235,14 @@ public class PddGoodsServiceImpl implements PddGoodsService {
     public PddGoodsDocumentVO getGoodsDocument(long goods_id) {
         return pddGoodsMapper.getGoodsDocument(goods_id);
     }
+
+    /**
+     * 删除优惠券过期的商品
+     */
+    @Override
+    public void deleteOverdueGoods() {
+        pddGoodsMapper.deleteOverdueGoods();
+    }
+
 
 }

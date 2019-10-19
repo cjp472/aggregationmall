@@ -38,11 +38,11 @@ public class AdminGoodsController {
      * 获取淘宝商品分类信息
      * @return
      */
-    @GetMapping(value = "/getGoodsOptInfo")
+    /*@GetMapping(value = "/getGoodsOptInfo")
     public String getGoodsOptInfo(){
         tbOptService.getGoodsOptInfo();
         return "ok";
-    }
+    }*/
 
 
     //测试获取商品数据

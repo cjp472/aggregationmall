@@ -75,13 +75,14 @@
       goods_desc, goods_thumbnail_url, goods_image_url, 
       goods_gallery_urls, mall_name, category_name, has_coupon,
       coupon_discount, promotion_rate, sales_tip,
-      desc_txt, serv_txt, lgst_txt, p_id, opt_id, opt_name, real_price)
+      desc_txt, serv_txt, lgst_txt, p_id, opt_id, opt_name, real_price,
+      coupon_start_time, coupon_end_time)
     values (#{goods_id}, #{goods_name}, #{min_group_price},
       #{goods_desc}, #{goods_thumbnail_url}, #{goods_image_url},
       #{goods_gallery_urls}, #{mall_name}, #{category_name}, #{has_coupon},
       #{coupon_discount}, #{promotion_rate}, #{sales_tip},
       #{desc_txt}, #{serv_txt}, #{lgst_txt}, #{p_id},
-      #{opt_id}, #{opt_name}, #{real_price})
+      #{opt_id}, #{opt_name}, #{real_price}, #{coupon_start_time}, #{coupon_end_time})
   </insert>
 
     <!--删除全部商品-->
@@ -105,6 +106,11 @@
         where pd.goods_id = pr.goods_id
         and pd.goods_id = #{goods_id}
     </select>
+
+    <delete id="deleteOverdueGoods" >
+        delete from `pdd_goods`
+        where coupon_end_time &lt; unix_timestamp()
+    </delete>
 
     <select id="getAllGoodsId" resultType="long">
         SELECT goods_id FROM pdd_goods WHERE has_url = 0

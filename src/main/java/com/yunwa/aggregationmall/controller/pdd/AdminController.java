@@ -22,19 +22,14 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys")
 public class AdminController {
-
     @Autowired
     private PddGoodsService pddGoodsService;
-
     @Autowired
     private OptService optService;
-
     @Autowired
     private PromotionUrlService promotionUrlService;
-
     @Autowired
     private ScheduledUtils scheduledUtils;
-
     @Autowired
     private PidService adminService;
 

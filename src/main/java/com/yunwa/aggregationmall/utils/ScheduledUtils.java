@@ -30,6 +30,6 @@ public class ScheduledUtils {
         //获取拼多多商品推广链接
         promotionUrlService.insertGoodsUrl();
         //获取淘宝商品数据
-        tbGoodsService.getTbGoodsInfo();
+        //tbGoodsService.getTbGoodsInfo();
     }
 }

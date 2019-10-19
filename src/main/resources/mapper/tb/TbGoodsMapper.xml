@@ -9,7 +9,7 @@
     <result column="coupon_end_time" jdbcType="VARCHAR" property="couponEndTime" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="pict_url" jdbcType="VARCHAR" property="pictUrl" />
-    <result column="zk_final_price" jdbcType="VARCHAR" property="zkFinalPrice" />
+    <result column="zk_final_price" jdbcType="DOUBLE" property="zkFinalPrice" />
     <result column="item_url" jdbcType="VARCHAR" property="itemUrl" />
     <result column="commission_rate" jdbcType="VARCHAR" property="commissionRate" />
     <result column="volume" jdbcType="BIGINT" property="volume" />
@@ -23,6 +23,8 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="total_promotion" jdbcType="DOUBLE" property="totalPromotion" />
     <result column="coupon_share_url" jdbcType="VARCHAR" property="couponShareUrl" />
+    <result column="level_one_category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="level_one_category_id" jdbcType="BIGINT" property="categoryId" />
   </resultMap>
 
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs">
@@ -33,12 +35,60 @@
   <sql id="Base_Column_List">
     id, item_id, short_title, coupon_start_time, coupon_end_time, title, pict_url, zk_final_price,
     item_url, commission_rate, volume, shop_title, url, coupon_amount, coupon_start_fee,
-    t_command, real_price, user_type, create_time, total_promotion, coupon_share_url
+    t_command, real_price, user_type, create_time, total_promotion, coupon_share_url,
+    level_one_category_name, level_one_category_id
   </sql>
 
   <sql id="Blob_Column_List">
     small_images, item_description
   </sql>
+
+    <!--分页查询-->
+  <select id="selectByPage" resultType="map" resultMap="ResultMapWithBLOBs">
+      select
+      <include refid="Base_Column_List" />
+      ,
+      <include refid="Blob_Column_List" />
+      from tb_goods
+      <where>
+          <if test="keyword != null and keyword != ''">
+              and title LIKE CONCAT ('%', #{keyword}, '%')
+          </if>
+          <if test="categoryId != null">
+              and level_one_category_id
+              in (SELECT `category_id`
+                  FROM `tb_goods_category`
+                  WHERE id = #{categoryId})
+          </if>
+      </where>
+      <if test="sortType != null">
+          order by
+          <choose>
+              <when test="sortType =='salesTip'">
+                  volume DESC
+              </when>
+              <when test="sortType =='minGroupPriceUp'">
+                  zk_final_price
+              </when>
+              <when test="sortType =='minGroupPriceDown'">
+                  zk_final_price desc
+              </when>
+              <otherwise>
+                  total_promotion desc
+              </otherwise>
+          </choose>
+      </if>
+  </select>
+
+    <!--获取商品详情-->
+    <select id="getTbGoodsDetail" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        FROM `tb_goods`
+        WHERE item_id = #{itemId, jdbcType=BIGINT}
+    </select>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select
@@ -62,15 +112,15 @@
       url, coupon_amount, coupon_start_fee,
       t_command, real_price, user_type,
       total_promotion, small_images,
-      item_description, coupon_share_url, level_one_category_name)
+      item_description, coupon_share_url, level_one_category_name, level_one_category_id)
     values (#{itemId,jdbcType=BIGINT}, #{shortTitle,jdbcType=VARCHAR},
       #{couponStartTime,jdbcType=VARCHAR}, #{couponEndTime,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
-      #{pictUrl,jdbcType=VARCHAR}, #{zkFinalPrice,jdbcType=VARCHAR}, #{itemUrl,jdbcType=VARCHAR},
+      #{pictUrl,jdbcType=VARCHAR}, #{zkFinalPrice,jdbcType=DOUBLE}, #{itemUrl,jdbcType=VARCHAR},
       #{commissionRate,jdbcType=VARCHAR}, #{volume,jdbcType=BIGINT}, #{shopTitle,jdbcType=VARCHAR},
       #{url}, #{couponAmount,jdbcType=VARCHAR}, #{couponStartFee,jdbcType=VARCHAR},
       #{tCommand,jdbcType=VARCHAR}, #{realPrice,jdbcType=DOUBLE}, #{userType,jdbcType=INTEGER},
       #{totalPromotion,jdbcType=DOUBLE}, #{smallImages,jdbcType=LONGVARCHAR},
-      #{itemDescription,jdbcType=LONGVARCHAR}, #{couponShareUrl}, #{categoryName})
+      #{itemDescription,jdbcType=LONGVARCHAR}, #{couponShareUrl}, #{categoryName}, #{categoryId})
   </insert>
 
   <insert id="insertSelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs">
@@ -166,7 +216,7 @@
         #{pictUrl,jdbcType=VARCHAR},
       </if>
       <if test="zkFinalPrice != null">
-        #{zkFinalPrice,jdbcType=VARCHAR},
+        #{zkFinalPrice,jdbcType=DOUBLE},
       </if>
       <if test="itemUrl != null">
         #{itemUrl,jdbcType=VARCHAR},
@@ -234,7 +284,7 @@
         pict_url = #{pictUrl,jdbcType=VARCHAR},
       </if>
       <if test="zkFinalPrice != null">
-        zk_final_price = #{zkFinalPrice,jdbcType=VARCHAR},
+        zk_final_price = #{zkFinalPrice,jdbcType=DOUBLE},
       </if>
       <if test="itemUrl != null">
         item_url = #{itemUrl,jdbcType=VARCHAR},
@@ -289,7 +339,7 @@
       coupon_end_time = #{couponEndTime,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       pict_url = #{pictUrl,jdbcType=VARCHAR},
-      zk_final_price = #{zkFinalPrice,jdbcType=VARCHAR},
+      zk_final_price = #{zkFinalPrice,jdbcType=DOUBLE},
       item_url = #{itemUrl,jdbcType=VARCHAR},
       commission_rate = #{commissionRate,jdbcType=VARCHAR},
       volume = #{volume,jdbcType=BIGINT},
@@ -314,7 +364,7 @@
       coupon_end_time = #{couponEndTime,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       pict_url = #{pictUrl,jdbcType=VARCHAR},
-      zk_final_price = #{zkFinalPrice,jdbcType=VARCHAR},
+      zk_final_price = #{zkFinalPrice,jdbcType=DOUBLE},
       item_url = #{itemUrl,jdbcType=VARCHAR},
       commission_rate = #{commissionRate,jdbcType=VARCHAR},
       volume = #{volume,jdbcType=BIGINT},

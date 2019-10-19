@@ -26,7 +26,7 @@ public class TbOptServiceImpl implements TbOptService {
     private MaterialOptionalAPI materialOptionalAPI;
 
     //从淘宝获取商品分类的信息，存到数据库
-    @Override
+    /*@Override
     public void getGoodsOptInfo() {
         //获取商品查询条件
         TbSearchPara tbSearchPara = tbSearchParaMapper.getLastRecord();
@@ -56,5 +56,23 @@ public class TbOptServiceImpl implements TbOptService {
         }
         //TbkConstantValues.KEYWORD
         //tbOptMapper.getGoodsOptInfo()
+    }*/
+
+    //更新分类信息
+    public void updateByOptName(String[] optNames, Long startTkRate, String sort, Long adzoneId, Boolean needFreeShipment,
+                                  Boolean isTmall, Boolean hasCoupon){
+        for (int i=0; i<optNames.length; i++){
+            //获取当前分类对应的分类id串
+            String categoryIdString = tbOptMapper.selectCategoryId(optNames[i]);
+            //调用接口获取最新的分类信息
+            TbOpt tbOpt = materialOptionalAPI.getGoodsOptById(categoryIdString, startTkRate, sort, adzoneId, needFreeShipment,
+                    isTmall, hasCoupon);
+            if (tbOpt != null){
+                //设置分类名
+                tbOpt.setOptName(optNames[i]);
+                //更新分类信息
+                tbOptMapper.updateOptInfo(tbOpt);
+            }
+        }
     }
 }

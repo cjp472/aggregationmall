@@ -24,6 +24,24 @@ public class PddGoodsDto implements Serializable, Cloneable {
     private String lgst_txt;        //物流分
     private Long opt_id;            //商品标签ID
     private String opt_name;        //商品标签名
+    private Long coupon_start_time; //优惠券生效时间,UNIX时间戳
+    private Long coupon_end_time;   //优惠券失效时间,UNIX时间戳
+
+    public Long getCoupon_start_time() {
+        return coupon_start_time;
+    }
+
+    public void setCoupon_start_time(Long coupon_start_time) {
+        this.coupon_start_time = coupon_start_time;
+    }
+
+    public Long getCoupon_end_time() {
+        return coupon_end_time;
+    }
+
+    public void setCoupon_end_time(Long coupon_end_time) {
+        this.coupon_end_time = coupon_end_time;
+    }
 
     public Long getGoods_id() {
         return goods_id;

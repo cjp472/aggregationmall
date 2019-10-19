@@ -17,6 +17,16 @@ public class TbOpt {
 
     private Date modifyTime;            //修改这条记录的时间
 
+    private String categoryId;          //一级类目ID
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -24,4 +24,6 @@ public interface PddGoodsService {
 
     PddGoodsDocumentVO getGoodsDocument(long goods_id);
 
+    //删除优惠券啊过期的商品
+    void deleteOverdueGoods();
 }

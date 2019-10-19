@@ -3,6 +3,7 @@ package com.yunwa.aggregationmall.pojo.tb.po;
 import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.Date;
+import java.util.List;
 
 public class TbGoods {
     private Integer id;     //主键
@@ -26,7 +27,7 @@ public class TbGoods {
     private String pictUrl;             //商品主图
 
     @JSONField(name = "zk_final_price")
-    private String zkFinalPrice;        //折扣价（元）
+    private Double zkFinalPrice;        //折扣价（元）
 
     @JSONField(name = "item_url")
     private String itemUrl;             //宝贝地址
@@ -65,6 +66,17 @@ public class TbGoods {
 
     @JSONField(name = "level_one_category_name")
     private String categoryName;    //商品信息-一级类目名称,如：女装
+
+    @JSONField(name = "level_one_category_id")
+    private Long categoryId;        //一级类目ID
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getCategoryName() {
         return categoryName;
@@ -138,12 +150,12 @@ public class TbGoods {
         this.pictUrl = pictUrl == null ? null : pictUrl.trim();
     }
 
-    public String getZkFinalPrice() {
+    public Double getZkFinalPrice() {
         return zkFinalPrice;
     }
 
-    public void setZkFinalPrice(String zkFinalPrice) {
-        this.zkFinalPrice = zkFinalPrice == null ? null : zkFinalPrice.trim();
+    public void setZkFinalPrice(Double zkFinalPrice) {
+        this.zkFinalPrice = zkFinalPrice;
     }
 
     public String getItemUrl() {

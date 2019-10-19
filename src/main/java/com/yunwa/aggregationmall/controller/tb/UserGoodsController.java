@@ -6,7 +6,9 @@ import com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs;
 import com.yunwa.aggregationmall.service.tb.TbGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,9 @@ import java.util.List;
  *
  * @author yueyang
  */
+
+@RestController
+@RequestMapping(value = "/user")
 public class UserGoodsController {
     @Autowired
     private TbGoodsService tbGoodsService;
@@ -23,26 +28,37 @@ public class UserGoodsController {
     /**
      * 首页商品查询
      * @param pageNum   当前页
-     * @param categoryName  分类名
+     * @param categoryId  分类Id
      * @param sortType 排序方式
      * @param keyword   关键词
      * @return
      */
-    @GetMapping(value = "/getGoodsList")
+    @GetMapping(value = "/getTbGoodsList")
     public PageInfo<TbGoodsWithBLOBs> getGoodsList(@RequestParam(value = "pageNum", required = false) int pageNum,
-                                           @RequestParam(value = "categoryName", required = false) String categoryName,
+                                           @RequestParam(value = "categoryId", required = false) String categoryId,
                                            @RequestParam(value = "sortType", required = false) String sortType,
                                            @RequestParam(value = "keyword", required = false) String keyword){
         HashMap<String, Object> map = new HashMap<>();
-        if (categoryName != null){
-            map.put("categoryName", categoryName);
+        if (categoryId != null && categoryId != ""){
+            map.put("categoryId", categoryId);
         }
-        if (sortType != null){
+        if (sortType != null && sortType != ""){
             map.put("sortType", sortType);
         }
-        if (keyword != null){
+        if (keyword != null && keyword != ""){
             map.put("keyword", keyword);
         }
         return tbGoodsService.getGoodsList(pageNum, map);
     }
+
+    /**
+     * 获取淘宝商品详情
+     * @param itemId 商品id
+     * @return 商品实体
+     */
+    @GetMapping(value = "/getTbGoodsDetail")
+    public TbGoodsWithBLOBs getTbGoodsDetail(Long itemId){
+        return tbGoodsService.getTbGoodsDetail(itemId);
+    }
+
 }

@@ -27,6 +27,7 @@ public class GoodsAPI {
         request.setOptId(opt_id);
         request.setPage(page);
         request.setPageSize(100);
+        request.setWithCoupon(true);
 
         PddDdkGoodsSearchResponse response = null;
         try {

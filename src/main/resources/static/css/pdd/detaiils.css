@@ -350,10 +350,15 @@ body{
     width: 35%;
 }
 
-.sub-img{
+.sub-img-back{
     margin-top: 3px;
     height: 26px;
     width: auto;
+}
+.sub-img{
+    margin-top: 3px;
+    height: 370px;
+    width: 100%;
 }
 .sub-img-content{
     text-align: center;
@@ -459,9 +464,23 @@ background:linear-gradient(90deg,#ff00d0,#ff1c00);
     box-sizing: border-box;
 }
 
+/*.copy{
+    outline: none;
+    border-radius: 3px !important;
+    color: rgb(255, 255, 255);
+    display: inline-block;
+    width: 70%;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    border-radius: 25px;
+    border: none;
+    background: linear-gradient(90deg,#FF8154,#Fc3E58);
+}*/
 
-
-
+.copy-tCommand{
+    background: rgb(103, 207, 132);
+}
 
 
 

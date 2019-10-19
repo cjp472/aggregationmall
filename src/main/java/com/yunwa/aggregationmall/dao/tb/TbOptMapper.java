@@ -23,4 +23,13 @@ public interface TbOptMapper {
 
     //更新分类的当前页字段
     int updateCurrentPage(@Param("optName") String optName, @Param("num") Long num);
+
+    int updateByOptName(String optName, Long startTkRate, String sort, Long adzoneId, Boolean needFreeShipment,
+                        Boolean isTmall, Boolean hasCoupon);
+
+    //查询根据分类名查询分类id串
+    String selectCategoryId(String optName);
+
+    //更新分类信息
+    int updateOptInfo(TbOpt tbOpt);
 }

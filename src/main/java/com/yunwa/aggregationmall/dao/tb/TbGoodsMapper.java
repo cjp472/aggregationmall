@@ -26,4 +26,7 @@ public interface TbGoodsMapper {
 
     //首页商品查询
     List<TbGoodsWithBLOBs> selectByPage(HashMap<String,Object> map);
+
+    //获取商品详情
+    TbGoodsWithBLOBs getTbGoodsDetail(Long itemId);
 }
