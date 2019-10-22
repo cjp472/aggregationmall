@@ -47,6 +47,7 @@ $(function () {
     //点击排序方式
     $(".res01 a").click(function () {
         sortType = $(this).next().val();    //获取选中的排序方式，给参数赋值
+        console.log(sortType)
         //清空原有商品
         $("#index-theme-box").empty();
         //查询
@@ -86,7 +87,6 @@ $(function () {
 
 //首页商品展示(当前页， 分类标签名，用户输入的关键字，排序方式)
 function showGoodsList(pageNum, categoryId, keyword, sortType) {
-    console.log(11111)
     $.ajax({
         url: "user/getTbGoodsList",
         data: { "pageNum": pageNum, "categoryId": categoryId, "keyword": keyword, "sortType": sortType },
@@ -109,7 +109,7 @@ function showGoodsList(pageNum, categoryId, keyword, sortType) {
                 "\t\t\t\t\t\t\t\t<h1 class=\"aui-list-theme-subtitle\"></h1>\n" +
                 "\n" +
                 "\t\t\t\t\t\t\t\t<h4>" +
-                "                   <em class=\"aui-infos\"> 月销量" + goods.volume + "</em>" +
+                "                   <em class=\"aui-infos\"> 月销量 " + goods.volume + "</em>" +
                 "\t\t\t\t\t\t\t\t\t<div class=\"aui-coupon\">\n" +
                 "<span class=\"line-group coupon-tag-wrap\"style=\"border:1px solid red\">\n" +
                 "\t <span class=\"coupon-tag\" style=\"background: linear-gradient(90deg,rgb(255, 0, 0),rgb(255, 0, 0));\">券</span><span class=\"coupon-price\" style=\"color:rgb(255, 0, 0);padding-right: 1px;border-right:1px solid red\">" + goods.couponAmount + "元</span>\n" +
@@ -118,7 +118,7 @@ function showGoodsList(pageNum, categoryId, keyword, sortType) {
                 "               </h4>\n" +
                 "\t\t\t\t\t\t\t\t<div class=\"aui-flex\">\n" +
                 "\t\t\t\t\t\t\t\t\t<div class=\"aui-flex-box\">\n" +
-                "\t\t\t\t\t\t\t\t\t\t<h2><em>原价 ￥</em><span>" + goods.zkFinalPrice + "</span> <i>￥" + goods.realPrice + "</i></h2>\n" +
+                "\t\t\t\t\t\t\t\t\t\t<h2><em>￥</em><span>" + goods.realPrice + "</span> <i>￥" + goods.zkFinalPrice+ "</i></h2>\n" +
                 "\t\t\t\t\t\t\t\t\t</div>\n" +
                 "\n" +
                 "\t\t\t\t\t\t\t\t</div>\n" +

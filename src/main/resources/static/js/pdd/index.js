@@ -104,7 +104,7 @@ function showGoodsList(pageNum, opt_name, keyword, sort_type) {
                 "\t\t\t\t\t\t\t\t<img src=" + goods.goods_thumbnail_url + " >\n" +
                 "\t\t\t\t\t\t\t</div>\n" +
                 "\t\t\t\t\t\t\t<div class=\"aui-list-theme-message\">\n" +
-                "\t\t\t\t\t\t\t\t<h1 class=\"aui-list-theme-title\">" + goods.goods_desc + "</h1>\n" +
+                "\t\t\t\t\t\t\t\t<h1 class=\"aui-list-theme-title\">" + goods.goods_name + "</h1>\n" +
                 "\t\t\t\t\t\t\t\t<h1 class=\"aui-list-theme-subtitle\"></h1>\n" +
                 "\n" +
                 "\t\t\t\t\t\t\t\t<h4>" +

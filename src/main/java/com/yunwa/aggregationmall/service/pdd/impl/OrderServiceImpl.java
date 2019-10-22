@@ -2,6 +2,7 @@ package com.yunwa.aggregationmall.service.pdd.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.yunwa.aggregationmall.common.RespBean;
 import com.yunwa.aggregationmall.dao.pdd.NotCpsOrderMapper;
 import com.yunwa.aggregationmall.dao.pdd.PddOrderMapper;
 import com.yunwa.aggregationmall.dao.pdd.PddPromotionRateMapper;
@@ -11,8 +12,10 @@ import com.yunwa.aggregationmall.pojo.pdd.vo.PddPromotionAmountVO;
 import com.yunwa.aggregationmall.provider.pdd.OrderAPI;
 import com.yunwa.aggregationmall.service.pdd.OrderService;
 import com.yunwa.aggregationmall.service.pdd.PddPromotionRateService;
+import com.yunwa.aggregationmall.service.tb.TbOrderService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,8 @@ public class OrderServiceImpl implements OrderService {
     private NotCpsOrderMapper notCpsOrderMapper;
     @Autowired
     private PddPromotionRateMapper pddPromotionRateMapper;
+    @Autowired
+    private TbOrderService tbOrderService;
 
     /**
      * 订单绑定
@@ -78,7 +83,11 @@ public class OrderServiceImpl implements OrderService {
                     }
                 }else if (order_sn.length() == 18){
                     //说明是淘宝的订单号，那么调用淘宝API查询此订单信息
-
+                    RespBean respBean = tbOrderService.tbOrderBind(order_sn, user_id);
+                    Integer status = respBean.getStatus();
+                    if (status == 500){
+                        //无此订单信息，不是cps订单
+                    }
                 }else {
                     //说明是京东的订单号，那么调用京东API查询此订单信息
 

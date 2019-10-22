@@ -107,6 +107,7 @@
         and pd.goods_id = #{goods_id}
     </select>
 
+    <!--删除优惠券过期的商品-->
     <delete id="deleteOverdueGoods" >
         delete from `pdd_goods`
         where coupon_end_time &lt; unix_timestamp()

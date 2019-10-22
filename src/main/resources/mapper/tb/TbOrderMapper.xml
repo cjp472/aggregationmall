@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunwa.aggregationmall.dao.tb.TbOrderMapper">
+
+  <resultMap id="BaseResultMap" type="com.yunwa.aggregationmall.pojo.tb.po.TbOrder">
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="tk_paid_time" jdbcType="VARCHAR" property="tkPaidTime" />
+    <result column="pay_price" jdbcType="VARCHAR" property="payPrice" />
+    <result column="pub_share_fee" jdbcType="VARCHAR" property="pubShareFee" />
+    <result column="tk_order_role" jdbcType="BIGINT" property="tkOrderRole" />
+    <result column="tk_earning_time" jdbcType="VARCHAR" property="tkEarningTime" />
+    <result column="adzone_id" jdbcType="BIGINT" property="adzoneId" />
+    <result column="pub_share_pre_fee" jdbcType="VARCHAR" property="pubSharePreFee" />
+    <result column="alipay_total_price" jdbcType="VARCHAR" property="alipayTotalPrice" />
+    <result column="trade_parent_id" jdbcType="VARCHAR" property="tradeParentId" />
+    <result column="tk_create_time" jdbcType="VARCHAR" property="tkCreateTime" />
+    <result column="tk_status" jdbcType="BIGINT" property="tkStatus" />
+    <result column="total_commission_rate" jdbcType="VARCHAR" property="totalCommissionRate" />
+    <result column="total_commission_fee" jdbcType="VARCHAR" property="totalCommissionFee" />
+    <result column="real_total_commission" jdbcType="DOUBLE" property="realTotalCommission" />
+    <result column="promotion_status" jdbcType="INTEGER" property="promotionStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, tk_paid_time, pay_price, pub_share_fee, tk_order_role, tk_earning_time, adzone_id,
+    pub_share_pre_fee, alipay_total_price, trade_parent_id, tk_create_time, tk_status, 
+    total_commission_rate, total_commission_fee, real_total_commission, promotion_status,
+    create_time, modify_time
+  </sql>
+
+    <!--查询订单-->
+  <select id="selectByTradeId" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from tb_order
+      where trade_parent_id = #{tradeId, jdbcType=VARCHAR}
+  </select>
+
+   <!-- 更新订单信息（添加用户id）-->
+    <update id="updateBytradeParentId">
+        UPDATE `tb_order`
+        SET `user_id` = #{userId, jdbcType=VARCHAR}, `modify_time` = NOW()
+        WHERE `trade_parent_id` = #{tradeId, jdbcType=VARCHAR}
+    </update>
+
+    <!--查询该用户所有订单-->
+    <select id="getAllOrdersByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM `tb_order`
+        WHERE `user_id` = #{userId, jdbcType=VARCHAR}
+    </select>
+
+    <!--更新订单状态-->
+    <update id="updateTkStatus">
+        UPDATE `tb_order`
+        SET `tk_status` = #{tkStatus, jdbcType=BIGINT}, `modify_time` = NOW()
+        WHERE `trade_parent_id` = #{tradeParentId, jdbcType=VARCHAR}
+    </update>
+
+    <!--查询该用户佣金总和-->
+    <select id="getAllRealPromotion" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT SUM(`real_total_commission`)
+        FROM `tb_order`
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+        AND `tk_status` IN (3, 12, 14)
+    </select>
+
+    <!--查询该用户订单总和-->
+    <select id="getOrderCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `tb_order`
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+        AND `tk_status` IN (3, 12, 14)
+    </select>
+
+    <!--查询该用户的本次可提现的佣金-->
+    <select id="getRealPromotion" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT SUM(`real_total_commission`)
+        FROM `tb_order`
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+        AND `tk_status` = 3
+    </select>
+
+    <!--查询未收货佣金-->
+    <select id="getSurplusPromotion" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT SUM(`real_total_commission`)
+        FROM `tb_order`
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+        AND `tk_status` = 12
+    </select>
+
+    <!--查询所有订单中，最早的一条记录付款的时间-->
+    <select id="getAllOrders" resultType="java.lang.String">
+        SELECT `tk_paid_time`
+        FROM `tb_order`
+        ORDER BY `tk_paid_time`
+        LIMIT 1
+    </select>
+
+      <!--更改返佣状态-->
+    <update id="changePromotionStatus" parameterType="java.lang.String">
+      UPDATE `tb_order`
+      SET `promotion_status` = 0, `modify_time` = NOW()
+      WHERE `user_id` = #{userId,jdbcType=VARCHAR}
+      AND `tk_status` = 3
+    </update>
+
+    <!--将已返佣订单插入历史表-->
+    <insert id="insertIntoFinished" parameterType="java.lang.String">
+      insert into `tb_finished_order`
+	    select
+        <include refid="Base_Column_List" />
+	    from `tb_order`
+	    WHERE `user_id` = #{userId,jdbcType=VARCHAR}
+	    AND `tk_status` = 3
+    </insert>
+
+    <!--删除已完成返佣的订单-->
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM `tb_order`
+        WHERE `user_id` = #{userId,jdbcType=VARCHAR}
+	    AND `tk_status` = 3
+    </delete>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <!--插入订单数据-->
+  <insert id="insert" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbOrder">
+    insert ignore into tb_order (user_id, tk_paid_time, pay_price,
+      pub_share_fee, tk_order_role, tk_earning_time, 
+      adzone_id, pub_share_pre_fee, alipay_total_price, 
+      trade_parent_id, tk_create_time, tk_status, 
+      total_commission_rate, total_commission_fee, 
+      real_total_commission)
+    values (#{userId,jdbcType=VARCHAR} #{tkPaidTime,jdbcType=VARCHAR}, #{payPrice,jdbcType=VARCHAR},
+      #{pubShareFee,jdbcType=VARCHAR}, #{tkOrderRole,jdbcType=BIGINT}, #{tkEarningTime,jdbcType=VARCHAR}, 
+      #{adzoneId,jdbcType=BIGINT}, #{pubSharePreFee,jdbcType=VARCHAR}, #{alipayTotalPrice,jdbcType=VARCHAR}, 
+      #{tradeParentId,jdbcType=VARCHAR}, #{tkCreateTime,jdbcType=VARCHAR}, #{tkStatus,jdbcType=BIGINT}, 
+      #{totalCommissionRate,jdbcType=VARCHAR}, #{totalCommissionFee,jdbcType=VARCHAR}, 
+      #{realTotalCommission,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbOrder">
+    insert into tb_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tkPaidTime != null">
+        tk_paid_time,
+      </if>
+      <if test="payPrice != null">
+        pay_price,
+      </if>
+      <if test="pubShareFee != null">
+        pub_share_fee,
+      </if>
+      <if test="tkOrderRole != null">
+        tk_order_role,
+      </if>
+      <if test="tkEarningTime != null">
+        tk_earning_time,
+      </if>
+      <if test="adzoneId != null">
+        adzone_id,
+      </if>
+      <if test="pubSharePreFee != null">
+        pub_share_pre_fee,
+      </if>
+      <if test="alipayTotalPrice != null">
+        alipay_total_price,
+      </if>
+      <if test="tradeParentId != null">
+        trade_parent_id,
+      </if>
+      <if test="tkCreateTime != null">
+        tk_create_time,
+      </if>
+      <if test="tkStatus != null">
+        tk_status,
+      </if>
+      <if test="totalCommissionRate != null">
+        total_commission_rate,
+      </if>
+      <if test="totalCommissionFee != null">
+        total_commission_fee,
+      </if>
+      <if test="realTotalCommission != null">
+        real_total_commission,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tkPaidTime != null">
+        #{tkPaidTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payPrice != null">
+        #{payPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="pubShareFee != null">
+        #{pubShareFee,jdbcType=VARCHAR},
+      </if>
+      <if test="tkOrderRole != null">
+        #{tkOrderRole,jdbcType=BIGINT},
+      </if>
+      <if test="tkEarningTime != null">
+        #{tkEarningTime,jdbcType=VARCHAR},
+      </if>
+      <if test="adzoneId != null">
+        #{adzoneId,jdbcType=BIGINT},
+      </if>
+      <if test="pubSharePreFee != null">
+        #{pubSharePreFee,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayTotalPrice != null">
+        #{alipayTotalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeParentId != null">
+        #{tradeParentId,jdbcType=VARCHAR},
+      </if>
+      <if test="tkCreateTime != null">
+        #{tkCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tkStatus != null">
+        #{tkStatus,jdbcType=BIGINT},
+      </if>
+      <if test="totalCommissionRate != null">
+        #{totalCommissionRate,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCommissionFee != null">
+        #{totalCommissionFee,jdbcType=VARCHAR},
+      </if>
+      <if test="realTotalCommission != null">
+        #{realTotalCommission,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbOrder">
+    update tb_order
+    <set>
+      <if test="tkPaidTime != null">
+        tk_paid_time = #{tkPaidTime,jdbcType=VARCHAR},
+      </if>
+      <if test="payPrice != null">
+        pay_price = #{payPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="pubShareFee != null">
+        pub_share_fee = #{pubShareFee,jdbcType=VARCHAR},
+      </if>
+      <if test="tkOrderRole != null">
+        tk_order_role = #{tkOrderRole,jdbcType=BIGINT},
+      </if>
+      <if test="tkEarningTime != null">
+        tk_earning_time = #{tkEarningTime,jdbcType=VARCHAR},
+      </if>
+      <if test="adzoneId != null">
+        adzone_id = #{adzoneId,jdbcType=BIGINT},
+      </if>
+      <if test="pubSharePreFee != null">
+        pub_share_pre_fee = #{pubSharePreFee,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayTotalPrice != null">
+        alipay_total_price = #{alipayTotalPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeParentId != null">
+        trade_parent_id = #{tradeParentId,jdbcType=VARCHAR},
+      </if>
+      <if test="tkCreateTime != null">
+        tk_create_time = #{tkCreateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tkStatus != null">
+        tk_status = #{tkStatus,jdbcType=BIGINT},
+      </if>
+      <if test="totalCommissionRate != null">
+        total_commission_rate = #{totalCommissionRate,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCommissionFee != null">
+        total_commission_fee = #{totalCommissionFee,jdbcType=VARCHAR},
+      </if>
+      <if test="realTotalCommission != null">
+        real_total_commission = #{realTotalCommission,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbOrder">
+    update tb_order
+    set tk_paid_time = #{tkPaidTime,jdbcType=VARCHAR},
+      pay_price = #{payPrice,jdbcType=VARCHAR},
+      pub_share_fee = #{pubShareFee,jdbcType=VARCHAR},
+      tk_order_role = #{tkOrderRole,jdbcType=BIGINT},
+      tk_earning_time = #{tkEarningTime,jdbcType=VARCHAR},
+      adzone_id = #{adzoneId,jdbcType=BIGINT},
+      pub_share_pre_fee = #{pubSharePreFee,jdbcType=VARCHAR},
+      alipay_total_price = #{alipayTotalPrice,jdbcType=VARCHAR},
+      trade_parent_id = #{tradeParentId,jdbcType=VARCHAR},
+      tk_create_time = #{tkCreateTime,jdbcType=VARCHAR},
+      tk_status = #{tkStatus,jdbcType=BIGINT},
+      total_commission_rate = #{totalCommissionRate,jdbcType=VARCHAR},
+      total_commission_fee = #{totalCommissionFee,jdbcType=VARCHAR},
+      real_total_commission = #{realTotalCommission,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>-->
+</mapper>

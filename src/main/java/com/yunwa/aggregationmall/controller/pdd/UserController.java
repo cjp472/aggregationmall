@@ -112,7 +112,7 @@ public class UserController {
      * @param keyword  关键词（买XX）
      * @return
      */
-    @PostMapping("buySomething")
+    @PostMapping("/buySomething")
     public Object buySomething(@RequestParam("keyword") String keyword){
         //返回一个短连接
         return urlUtils.getShortURL(keyword);

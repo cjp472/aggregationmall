@@ -64,7 +64,7 @@
       <if test="sortType != null">
           order by
           <choose>
-              <when test="sortType =='salesTip'">
+              <when test="sortType =='volume'">
                   volume DESC
               </when>
               <when test="sortType =='minGroupPriceUp'">

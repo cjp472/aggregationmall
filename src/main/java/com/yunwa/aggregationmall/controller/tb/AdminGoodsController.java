@@ -1,10 +1,12 @@
 package com.yunwa.aggregationmall.controller.tb;
 
+import com.yunwa.aggregationmall.common.RespBean;
 import com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs;
 import com.yunwa.aggregationmall.provider.tb.MaterialOptionalAPI;
 import com.yunwa.aggregationmall.provider.tb.TCommandAPI;
 import com.yunwa.aggregationmall.service.tb.TbGoodsService;
 import com.yunwa.aggregationmall.service.tb.TbOptService;
+import com.yunwa.aggregationmall.service.tb.TbOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,8 @@ public class AdminGoodsController {
     private MaterialOptionalAPI materialOptionalAPI;
     @Autowired
     private TCommandAPI tCommandAPI;
+    @Autowired
+    private TbOrderService tbOrderService;
 
     /**
      * 获取选品库id
@@ -58,10 +62,21 @@ public class AdminGoodsController {
      * @return
      */
     @GetMapping(value = "/getTbGoodsInfo")
-    public String getTbGoodsInfo(){
+    public RespBean getTbGoodsInfo(){
         tbGoodsService.getTbGoodsInfo();
-        return "ok";
+        return RespBean.ok("获取商品数据成功！");
     }
 
+    /**
+     * 将该用户的已返佣的订单移入历史表
+     * @return
+     */
+    @GetMapping(value = "/moveToFinished")
+    public RespBean moveToFinished(String userId){
+        if (tbOrderService.moveToFinished(userId)){
+            return RespBean.ok("订单已移入历史表！");
+        }
+        return RespBean.error("订单移入历史表失败！");
+    }
 
 }

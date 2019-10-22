@@ -1,10 +1,13 @@
 package com.yunwa.aggregationmall;
 
 import com.yunwa.aggregationmall.provider.pdd.WeChatAPI;
+import com.yunwa.aggregationmall.provider.tb.OrderSearchAPI;
 import com.yunwa.aggregationmall.provider.tb.TCommandAPI;
 import com.yunwa.aggregationmall.service.pdd.PddGoodsService;
 import com.yunwa.aggregationmall.service.pdd.impl.PddGoodsServiceImpl;
 import com.yunwa.aggregationmall.service.pdd.impl.PidServiceImpl;
+import com.yunwa.aggregationmall.service.tb.TbOrderService;
+import com.yunwa.aggregationmall.service.tb.impl.TbOrderServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,11 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class test {
     @Autowired
-    private PddGoodsService pddGoodsService;
+    //private PddGoodsService pddGoodsService;
+    private TbOrderService tbOrderService;
 
     @Test
-    public void testService(){
+    public void testService() {
         //PddGoodsServiceImpl service = new PddGoodsServiceImpl();
         //service.goodsSearch("女装", null,10);
         //service.delPddGoods();
@@ -38,7 +42,12 @@ public class test {
         //TCommandAPI tCommandAPI = new TCommandAPI();
         //String tCommand = tCommandAPI.createTCommand("www.baidu.com", "测试！测试！测试！");
         //System.out.println(tCommand);
-        pddGoodsService.goodsSearch();
-    }
+        //pddGoodsService.goodsSearch();
+        /*OrderSearchAPI orderSearchAPI = new OrderSearchAPI();
+        orderSearchAPI.getOrderDetail(1L);*/
 
+        //TbOrderServiceImpl tbOrderService = new TbOrderServiceImpl();
+        //tbOrderService.tbOrderSearch();
+        tbOrderService.updateOrderStatus();
+    }
 }
