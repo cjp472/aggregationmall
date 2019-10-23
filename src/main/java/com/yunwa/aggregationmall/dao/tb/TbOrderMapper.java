@@ -10,7 +10,11 @@ import java.util.List;
 public interface TbOrderMapper {
     int deleteByPrimaryKey(Integer id);
 
+    //插入订单数据（无用户id）
     int insert(TbOrder record);
+
+    //插入订单数据（包含用户id）
+    int insertWithUserId(TbOrder tbOrder);
 
     int insertSelective(TbOrder record);
 
@@ -54,4 +58,5 @@ public interface TbOrderMapper {
 
     //删除已返佣的订单
     int delete(String userId);
+
 }

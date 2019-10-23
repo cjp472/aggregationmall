@@ -3,7 +3,7 @@ package com.yunwa.aggregationmall.service.tb.impl;
 import com.yunwa.aggregationmall.common.RespBean;
 import com.yunwa.aggregationmall.dao.pdd.PddPromotionRateMapper;
 import com.yunwa.aggregationmall.dao.tb.TbOrderMapper;
-import com.yunwa.aggregationmall.pojo.tb.dto.TbPromotionDTO;
+import com.yunwa.aggregationmall.pojo.CommissionDTO;
 import com.yunwa.aggregationmall.pojo.tb.po.TbOrder;
 import com.yunwa.aggregationmall.provider.tb.OrderSearchAPI;
 import com.yunwa.aggregationmall.service.tb.TbOrderService;
@@ -46,10 +46,10 @@ public class TbOrderServiceImpl implements TbOrderService {
         //是否有下一页
         //Boolean hasNext = (Boolean) orderDetail.get("hasNext");
         if (tbOrders != null){
-            //遍历集合将订单数据插入带数据库
+            //遍历集合将订单数据插入到数据库
             for (TbOrder tbOrder : tbOrders){
                 //获取佣金金额
-                String totalCommissionFee = tbOrder.getTotalCommissionFee();
+                String totalCommissionFee = tbOrder.getPubSharePreFee();
                 //获取返佣比例
                 Double rate = pddPromotionRateMapper.selectLastRate();
                 //设置用户佣金
@@ -76,19 +76,12 @@ public class TbOrderServiceImpl implements TbOrderService {
      */
     @Override
     public RespBean tbOrderBind(String tradeId, String userId) {
-        //查询最新的订单
-        //this.tbOrderSearch();
         //先查询订单表里有无该订单
         TbOrder tbOrder = tbOrderMapper.selectByTradeId(tradeId);
         if (tbOrder != null){
             //更新订单(添加userId)
             tbOrderMapper.updateBytradeParentId(tradeId, userId);
             return RespBean.ok("订单绑定成功！");
-            /*int row = tbOrderMapper.updateBytradeParentId(tradeId, userId);
-            if (row > 0){
-                return RespBean.ok("订单绑定成功！");
-            }
-            return RespBean.error("订单绑定失败！", tbOrder);*/
         }else {
             //调用淘宝接口查询订单
             Map<String, Object> orderDetail = orderSearchAPI.getOrderDetail(1L);
@@ -96,15 +89,17 @@ public class TbOrderServiceImpl implements TbOrderService {
             List<TbOrder> tbOrders = (List<TbOrder>) orderDetail.get("tbOrders");
             if (tbOrders != null){
                 for (TbOrder order : tbOrders){
-                   if (tradeId == order.getTradeParentId()){    //找到了该订单信息
-                       //更新订单(添加userId)
-                       tbOrderMapper.updateBytradeParentId(tradeId, userId);
+                   if (tradeId.equals(order.getTradeParentId())){    //找到了该订单信息
+                       //设置用户id
+                       order.setUserId(userId);
+                       //插入到订单表
+                       tbOrderMapper.insertWithUserId(order);
                        return RespBean.ok("订单绑定成功！");
                    }
                 }
             }
         }
-       return RespBean.error("订单绑定失败！无此订单信息。");
+        return RespBean.ok("订单绑定失败！无此订单信息。");
     }
 
     /**
@@ -112,28 +107,10 @@ public class TbOrderServiceImpl implements TbOrderService {
      * @param userId 用户id
      */
     @Override
-    public RespBean tbGetMoney(String userId) {
+    public CommissionDTO tbGetMoney(String userId) {
         //获取该用户所有的订单
         List<TbOrder> allOrders = tbOrderMapper.getAllOrdersByUser(userId);
-        TbPromotionDTO tbPromotionDTO = new TbPromotionDTO();
         if (allOrders.size() != 0){
-            //遍历订单获取订单付款时间，更新订单状态
-            /*for (TbOrder tbOrder : allOrders){
-                //当前订单的付款时间
-                String tkPaidTime = tbOrder.getTkPaidTime();
-                //当前订单的订单号
-                String tradeParentId = tbOrder.getTradeParentId();
-                //获取已知时间的订单集合
-                List<TbOrder> orders = orderSearchAPI.getOrderByTime();
-                for (TbOrder order : orders){
-                    if (order.getTradeParentId() == tradeParentId){
-                        //获取当前订单的状态
-                        Long tkStatus = order.getTkStatus();
-                        //更新该条订单的状态
-                        tbOrderMapper.updateTkStatus(tradeParentId, tkStatus);
-                    }
-                }
-            }*/
             //计算所有满足条件的订单的该用户佣金总和（3，12，14）
             Double allRealPromotion = tbOrderMapper.getAllRealPromotion(userId);
             //查询该用户的订单总数（3，12，14）
@@ -145,15 +122,20 @@ public class TbOrderServiceImpl implements TbOrderService {
             //被冻结佣金（12，14）
             Double frozenPromotion = allRealPromotion - realPromotion;
 
-            tbPromotionDTO.setTotalPromotion(allRealPromotion);
-            tbPromotionDTO.setOrderCount(orderCount);
-            tbPromotionDTO.setRealPromotion(realPromotion);
-            tbPromotionDTO.setSurplusPromotion(SurplusPromotion);
-            tbPromotionDTO.setFrozenPromotion(frozenPromotion);
-        }else {
+            CommissionDTO commissionDTO = new CommissionDTO();
+            commissionDTO.setTotalPromotion(allRealPromotion);
+            commissionDTO.setOrderCount(orderCount);
+            commissionDTO.setRealPromotion(realPromotion);
+            commissionDTO.setSurplusPromotion(SurplusPromotion);
+            commissionDTO.setFrozenPromotion(frozenPromotion);
+            return commissionDTO;
+
+        }
+        return null;
+        /*else {
             return RespBean.error("提现失败，无此用户订单信息！");
         }
-        return RespBean.ok("提现成功！", tbPromotionDTO);
+        return RespBean.ok("提现成功！", tbPromotionDTO);*/
     }
 
     /**

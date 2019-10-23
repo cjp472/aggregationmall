@@ -2,7 +2,9 @@ package com.yunwa.aggregationmall.controller.tb;
 
 import com.yunwa.aggregationmall.common.RespBean;
 import com.yunwa.aggregationmall.pojo.tb.po.TbGoodsWithBLOBs;
+import com.yunwa.aggregationmall.provider.pdd.OrderAPI;
 import com.yunwa.aggregationmall.provider.tb.MaterialOptionalAPI;
+import com.yunwa.aggregationmall.provider.tb.OrderSearchAPI;
 import com.yunwa.aggregationmall.provider.tb.TCommandAPI;
 import com.yunwa.aggregationmall.service.tb.TbGoodsService;
 import com.yunwa.aggregationmall.service.tb.TbOptService;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/sys")
@@ -27,6 +31,8 @@ public class AdminGoodsController {
     private TCommandAPI tCommandAPI;
     @Autowired
     private TbOrderService tbOrderService;
+    @Autowired
+    private OrderSearchAPI orderSearchAPI;
 
     /**
      * 获取选品库id
@@ -77,6 +83,15 @@ public class AdminGoodsController {
             return RespBean.ok("订单已移入历史表！");
         }
         return RespBean.error("订单移入历史表失败！");
+    }
+
+    /**
+     * 获取淘宝订单数据
+     * @return
+     */
+    @GetMapping(value = "/getOrderDetail")
+    public void getOrderDetail(){
+         tbOrderService.tbOrderSearch();
     }
 
 }

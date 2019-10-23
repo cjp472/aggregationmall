@@ -28,7 +28,7 @@ public class OrderSearchAPI {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     //Long pageNo = 1L;   //当前页
 
-    //获取淘宝订单详情
+    //每3分钟获取淘宝订单详情
     public Map<String, Object> getOrderDetail(Long pageNo){
         HashMap<String, Object> map = new HashMap<>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  //设置日期格式
@@ -42,11 +42,13 @@ public class OrderSearchAPI {
 
         TbkOrderDetailsGetRequest req = new TbkOrderDetailsGetRequest();
         req.setQueryType(2L);
-        req.setPositionIndex("2222_334666");
+        //req.setPositionIndex("2222_334666");
         req.setPageSize(100L);
         req.setTkStatus(12L);
-        req.setEndTime(nowTime);
-        req.setStartTime(before20Time);
+        /*req.setEndTime(nowTime);
+        req.setStartTime(before20Time);*/
+        req.setEndTime("2019-10-23 15:30:00");
+        req.setStartTime("2019-10-23 15:25:00");
         req.setPageNo(pageNo);
         String responseBody = null;
         try {
@@ -80,7 +82,7 @@ public class OrderSearchAPI {
         return map;
     }
 
-    //查询订单
+    //每月15号和25号查询订单
     public HashMap<String, Object> getOrderByTime(String endTime, String startTime, Long pageNo){
         HashMap<String, Object> map = new HashMap<>();
         TbkOrderDetailsGetRequest req = new TbkOrderDetailsGetRequest();

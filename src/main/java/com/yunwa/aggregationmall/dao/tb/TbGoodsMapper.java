@@ -29,4 +29,7 @@ public interface TbGoodsMapper {
 
     //获取商品详情
     TbGoodsWithBLOBs getTbGoodsDetail(Long itemId);
+
+    //删除优惠券过期商品
+    int deleteOverdueGoods();
 }

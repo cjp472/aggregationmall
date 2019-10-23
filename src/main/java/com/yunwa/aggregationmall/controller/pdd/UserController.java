@@ -1,6 +1,8 @@
 package com.yunwa.aggregationmall.controller.pdd;
 
 import com.github.pagehelper.PageInfo;
+import com.yunwa.aggregationmall.common.RespBean;
+import com.yunwa.aggregationmall.pojo.CommissionDTO;
 import com.yunwa.aggregationmall.pojo.pdd.po.PddGoods;
 import com.yunwa.aggregationmall.pojo.pdd.po.PromotionUrl;
 import com.yunwa.aggregationmall.pojo.pdd.vo.PddGoodsDocumentVO;
@@ -90,9 +92,9 @@ public class UserController {
      * @param user_id   用户id
      * @return
      */
-    @PostMapping(value = "/orderBind")
-    public String orderBind(@RequestParam("order_sn") String order_sn,
-                            @RequestParam("user_id") String user_id){
+    @PostMapping(value = "/pddOrderBind")
+    public RespBean orderBind(@RequestParam("order_sn") String order_sn,
+                              @RequestParam("user_id") String user_id){
         return orderService.orderBind(order_sn, user_id);
     }
 
@@ -101,8 +103,8 @@ public class UserController {
      * @param user_id   用户id
      * @return  返佣金额
      */
-    @PostMapping("/getMoney")
-    public String getMoney(@RequestParam("user_id") String user_id){
+    @PostMapping("/pddGetMoney")
+    public CommissionDTO getMoney(@RequestParam("user_id") String user_id){
         //获取返佣金额
         return orderService.getMoney(user_id);
     }

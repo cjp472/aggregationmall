@@ -61,7 +61,7 @@ $(function () {
             var keyword = $("input").val();
             console.log(pageNo);
             //加载下一页商品
-            showGoodsList(pageNo++, opt_name, keyword, sort_type);
+            showGoodsList(++pageNo, opt_name, keyword, sort_type);
         }
     });
 
@@ -72,7 +72,7 @@ $(function () {
     });
 
     //详情页点返回，跳回到首页原来的位置
-    function jump(goods_id) {
+    /*function jump(goods_id) {
         var pageEntity = {
             "pageNo": pageNo,
             "opt_name": opt_name,
@@ -81,7 +81,12 @@ $(function () {
         };
         // 存储值：将对象转换为Json字符串
         sessionStorage.setItem('page', JSON.stringify(pageEntity));
-    }
+    }*/
+
+    //底部logo文字变色
+    /*$(".aui-bottom-box a").click(function () {
+        $(this).find(".sub").addClass("suba");
+    });*/
 });
 
 //首页商品展示(当前页， 分类标签名，用户输入的关键字，排序方式)
@@ -94,6 +99,7 @@ function showGoodsList(pageNum, opt_name, keyword, sort_type) {
     //回调
     function success(pageInfo) {
         $.each(pageInfo.list, function (index, goods) {
+            console.log(goods.goods_id);
             //商品券后价
             var perferPrice = (goods.min_group_price - goods.coupon_discount) / 100;
             var $html = "<a href=\"pddDetails.html?goods_id=" + goods.goods_id + " \"  class='aui-list-item' >\n" +

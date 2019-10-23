@@ -62,7 +62,7 @@ $(function () {
             var keyword = $("input").val();
             console.log(pageNum);
             //加载下一页商品
-            showGoodsList(pageNum++, categoryId, keyword, sortType);
+            showGoodsList(++pageNum, categoryId, keyword, sortType);
         }
     });
 
@@ -83,6 +83,11 @@ $(function () {
         // 存储值：将对象转换为Json字符串
         sessionStorage.setItem('page', JSON.stringify(pageEntity));
     }*/
+
+    //底部logo文字变色
+    /*$(".aui-bottom-box a").click(function () {
+        $(this).find(".sub").addClass("suba");
+    });*/
 });
 
 //首页商品展示(当前页， 分类标签名，用户输入的关键字，排序方式)

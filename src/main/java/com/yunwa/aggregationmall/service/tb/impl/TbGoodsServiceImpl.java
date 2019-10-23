@@ -117,6 +117,14 @@ public class TbGoodsServiceImpl implements TbGoodsService {
         return tbGoodsMapper.getTbGoodsDetail(itemId);
     }
 
+    /**
+     * 删除优惠券过期商品
+     */
+    @Override
+    public void deleteOverdueGoods() {
+        tbGoodsMapper.deleteOverdueGoods();
+    }
+
     @Override
     public void tbGoodsSearch() {
         /*for (int i=0; i<TbkConstantValues.KEYWORD.length; i++){

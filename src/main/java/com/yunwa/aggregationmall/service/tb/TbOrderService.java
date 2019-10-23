@@ -1,6 +1,7 @@
 package com.yunwa.aggregationmall.service.tb;
 
 import com.yunwa.aggregationmall.common.RespBean;
+import com.yunwa.aggregationmall.pojo.CommissionDTO;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,7 +15,7 @@ public interface TbOrderService {
 
     RespBean tbOrderBind(String tradeId, String userId);
 
-    RespBean tbGetMoney(String userId);
+    CommissionDTO tbGetMoney(String userId);
 
     void updateOrderStatus();
 

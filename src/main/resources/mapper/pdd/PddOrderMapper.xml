@@ -112,8 +112,8 @@
     </update>
 
     <!--查询拼多多返佣-->
-    <select id="selectPddPromotionAmount" parameterType="java.lang.String" resultType="com.yunwa.aggregationmall.pojo.pdd.vo.PddPromotionAmountVO">
-        SELECT COUNT(order_sn) AS `order_count`, SUM(`real_promotion_amount`) AS `predict_promotion`
+    <select id="selectPddPromotionAmount" parameterType="java.lang.String" resultType="com.yunwa.aggregationmall.pojo.CommissionDTO">
+        SELECT COUNT(order_sn) AS `orderCount`, SUM(`real_promotion_amount`) AS `totalPromotion`
         FROM `pdd_order`
         WHERE promotion_status = 1 AND user_id = #{user_id,jdbcType=VARCHAR}
     </select>

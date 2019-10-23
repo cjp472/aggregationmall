@@ -219,7 +219,6 @@ $(function () {
 
     //查看图文详情
     $(".text-btn-span").click(function () {
-        console.log(111111);
         //遍历数组，将图片拼接上去
         for (var i = 0; i < picUrlArr.length; i++  ) {
             $(this).appendChild("<a href=\"###\" class=\"active\">\n" +

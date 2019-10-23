@@ -1,6 +1,7 @@
 package com.yunwa.aggregationmall.dao.pdd;
 
 
+import com.yunwa.aggregationmall.pojo.CommissionDTO;
 import com.yunwa.aggregationmall.pojo.pdd.po.PddOrder;
 import com.yunwa.aggregationmall.pojo.pdd.vo.PddPromotionAmountVO;
 import org.springframework.stereotype.Repository;
@@ -44,7 +45,7 @@ public interface PddOrderMapper {
     int changePromotionStatus(String user_id);
 
     //查询返佣
-    PddPromotionAmountVO selectPddPromotionAmount(String user_id);
+    CommissionDTO selectPddPromotionAmount(String user_id);
 
     //查询被冻结佣金
     Long getFrozenPromotion(String user_id);

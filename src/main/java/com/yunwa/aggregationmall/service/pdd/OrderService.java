@@ -1,11 +1,14 @@
 package com.yunwa.aggregationmall.service.pdd;
 
+import com.yunwa.aggregationmall.common.RespBean;
+import com.yunwa.aggregationmall.pojo.CommissionDTO;
+
 public interface OrderService {
-    /*boolean insertOrderData(OrderDto orderDto);*/
+    /*boolean insertOrderData(CommissionDTO orderDto);*/
 
     //绑定订单
-    String orderBind(String order_sn, String user_id);
+    RespBean orderBind(String order_sn, String user_id);
 
     //返佣
-    String getMoney(String user_id);
+    CommissionDTO getMoney(String user_id);
 }

@@ -83,6 +83,7 @@ public class UserGoodsController {
      */
     @PostMapping(value = "/tbGetMoney")
     public RespBean tbGetMoney(@RequestParam("userId") String userId){
-        return tbOrderService.tbGetMoney(userId);
+        //return tbOrderService.tbGetMoney(userId);
+        return null;
     }
 }

@@ -13,4 +13,7 @@ public interface TbGoodsService {
     PageInfo<TbGoodsWithBLOBs> getGoodsList(int pageNum, HashMap<String, Object> map);
 
     TbGoodsWithBLOBs getTbGoodsDetail(Long itemId);
+
+    //删除优惠券过期商品
+    void deleteOverdueGoods();
 }

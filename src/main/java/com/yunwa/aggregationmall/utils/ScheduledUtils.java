@@ -45,28 +45,31 @@ public class ScheduledUtils {
         promotionUrlService.insertGoodsUrl();
         //删除优惠券过期的商品
         pddGoodsService.deleteOverdueGoods();
-        //获取淘宝商品数据
-        //tbGoodsService.getTbGoodsInfo();
-    }
-
-    //定时获取淘宝用户订单数据
-    @Scheduled(cron = "0 */3 * * * ?")
-    public void getOrderData(){
-        tbOrderService.tbOrderSearch();
         logger.info("定时任务开始执行--->"+df.format(new Date()));
     }
 
-    //定时更新淘宝订单状态数据（每月15号凌晨四点）
-    @Scheduled(cron = "0 0 04 15 * ?")
+    //定时爬取淘宝商品数据
+    @Scheduled(cron="0 0 3 * * ?")
+    public void getTbGoodsData(){
+        //获取淘宝商品数据
+        tbGoodsService.getTbGoodsInfo();
+        //删除优惠券过期的商品
+        tbGoodsService.deleteOverdueGoods();
+        logger.info("定时任务开始执行--->"+df.format(new Date()));
+    }
+
+    //定时获取淘宝用户订单数据
+//    @Scheduled(cron = "0 */3 * * * ?")
+//    public void getOrderData(){
+//        tbOrderService.tbOrderSearch();
+//        logger.info("定时任务开始执行--->"+df.format(new Date()));
+//    }
+
+    //定时更新淘宝订单状态数据（每月15号和25号凌晨四点）
+    @Scheduled(cron = "0 0 04 15,25 * *")
     public void updateOrderStatus(){
         tbOrderService.updateOrderStatus();
         logger.info("定时任务开始执行--->"+df.format(new Date()));
     }
 
-    //定时更新淘宝订单状态数据（每月25号凌晨四点）
-    @Scheduled(cron = "0 0 04 25 * ?")
-    public void updateOrderStatus2(){
-        tbOrderService.updateOrderStatus();
-        logger.info("定时任务开始执行--->"+df.format(new Date()));
-    }
 }

@@ -61,7 +61,7 @@
 
     <!--查询该用户佣金总和-->
     <select id="getAllRealPromotion" parameterType="java.lang.String" resultType="java.lang.Double">
-        SELECT SUM(`real_total_commission`)
+        SELECT SUM(`pub_share_pre_fee`)
         FROM `tb_order`
         WHERE user_id = #{userId,jdbcType=VARCHAR}
         AND `tk_status` IN (3, 12, 14)
@@ -137,19 +137,36 @@
 
     <!--插入订单数据-->
   <insert id="insert" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbOrder">
-    insert ignore into tb_order (user_id, tk_paid_time, pay_price,
+    insert ignore into tb_order (tk_paid_time, pay_price,
       pub_share_fee, tk_order_role, tk_earning_time, 
       adzone_id, pub_share_pre_fee, alipay_total_price, 
       trade_parent_id, tk_create_time, tk_status, 
       total_commission_rate, total_commission_fee, 
       real_total_commission)
-    values (#{userId,jdbcType=VARCHAR} #{tkPaidTime,jdbcType=VARCHAR}, #{payPrice,jdbcType=VARCHAR},
+    values (#{tkPaidTime,jdbcType=VARCHAR}, #{payPrice,jdbcType=VARCHAR},
       #{pubShareFee,jdbcType=VARCHAR}, #{tkOrderRole,jdbcType=BIGINT}, #{tkEarningTime,jdbcType=VARCHAR}, 
       #{adzoneId,jdbcType=BIGINT}, #{pubSharePreFee,jdbcType=VARCHAR}, #{alipayTotalPrice,jdbcType=VARCHAR}, 
       #{tradeParentId,jdbcType=VARCHAR}, #{tkCreateTime,jdbcType=VARCHAR}, #{tkStatus,jdbcType=BIGINT}, 
       #{totalCommissionRate,jdbcType=VARCHAR}, #{totalCommissionFee,jdbcType=VARCHAR}, 
       #{realTotalCommission,jdbcType=DOUBLE})
   </insert>
+
+    <!--插入包含用户id的订单数据-->
+    <insert id="insertWithUserId" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbOrder">
+    insert ignore into tb_order (user_id, tk_paid_time, pay_price,
+      pub_share_fee, tk_order_role, tk_earning_time,
+      adzone_id, pub_share_pre_fee, alipay_total_price,
+      trade_parent_id, tk_create_time, tk_status,
+      total_commission_rate, total_commission_fee,
+      real_total_commission)
+    values (#{userId,jdbcType=VARCHAR}, #{tkPaidTime,jdbcType=VARCHAR}, #{payPrice,jdbcType=VARCHAR},
+      #{pubShareFee,jdbcType=VARCHAR}, #{tkOrderRole,jdbcType=BIGINT}, #{tkEarningTime,jdbcType=VARCHAR},
+      #{adzoneId,jdbcType=BIGINT}, #{pubSharePreFee,jdbcType=VARCHAR}, #{alipayTotalPrice,jdbcType=VARCHAR},
+      #{tradeParentId,jdbcType=VARCHAR}, #{tkCreateTime,jdbcType=VARCHAR}, #{tkStatus,jdbcType=BIGINT},
+      #{totalCommissionRate,jdbcType=VARCHAR}, #{totalCommissionFee,jdbcType=VARCHAR},
+      #{realTotalCommission,jdbcType=DOUBLE})
+  </insert>
+
   <insert id="insertSelective" parameterType="com.yunwa.aggregationmall.pojo.tb.po.TbOrder">
     insert into tb_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
